@@ -4,7 +4,6 @@ import './App.css';
 import { AuthProvider } from './contexts/AuthContext';
 import { ConditionProvider } from './contexts/ConditionContext';
 import { SummaryProvider } from './contexts/SummaryContext';
-import { PaymentProvider } from './contexts/PaymentContext';
 import HomePage from './pages/HomePage';
 import BidDetailPage from './pages/BidDetailPage';
 import PricingPage from './pages/PricingPage';
@@ -29,9 +28,7 @@ function App() {
     <AuthProvider>
       <ConditionProvider>
         <SummaryProvider>
-          <PaymentProvider>
-            <AppContent />
-          </PaymentProvider>
+          <AppContent />
         </SummaryProvider>
       </ConditionProvider>
     </AuthProvider>

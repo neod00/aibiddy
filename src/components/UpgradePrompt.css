@@ -1,0 +1,319 @@
+/* 업그레이드 프롬프트 스타일 */
+.upgrade-prompt-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.upgrade-prompt {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  max-width: 500px;
+  width: 100%;
+  overflow: hidden;
+  animation: promptSlideIn 0.3s ease-out;
+}
+
+@keyframes promptSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.prompt-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 24px;
+  text-align: center;
+  position: relative;
+}
+
+.prompt-header h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.close-button {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.close-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.prompt-body {
+  padding: 32px 24px;
+  text-align: center;
+}
+
+.reason-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+.reason-message h3 {
+  margin: 0 0 12px 0;
+  color: #111827;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.reason-message p {
+  margin: 0 0 24px 0;
+  color: #6b7280;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.benefits {
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.benefits h4 {
+  margin: 0 0 16px 0;
+  color: #111827;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.benefits ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.benefits li {
+  color: #374151;
+  font-size: 14px;
+  margin-bottom: 8px;
+  padding: 4px 0;
+}
+
+.prompt-footer {
+  display: flex;
+  gap: 12px;
+  padding: 0 24px 24px 24px;
+}
+
+.btn {
+  flex: 1;
+  padding: 14px 20px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.6);
+}
+
+.btn-secondary {
+  background: #f3f4f6;
+  color: #374151;
+  border: 2px solid #e5e7eb;
+}
+
+.btn-secondary:hover {
+  background: #e5e7eb;
+  transform: translateY(-1px);
+}
+
+/* 위트 있는 메시지 스타일 */
+.witty-message {
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+  animation: wittySlideIn 0.5s ease-out;
+}
+
+@keyframes wittySlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8) rotate(-5deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.witty-message h2 {
+  margin: 0 0 16px 0;
+  color: #111827;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.witty-message p {
+  margin: 0 0 20px 0;
+  color: #6b7280;
+  font-size: 16px;
+}
+
+.sub-message {
+  color: #9ca3af !important;
+  font-size: 14px !important;
+  font-style: italic;
+}
+
+.loading-dots {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  margin: 20px 0;
+}
+
+.loading-dots span {
+  width: 8px;
+  height: 8px;
+  background: #10b981;
+  border-radius: 50%;
+  animation: loadingDots 1.4s infinite ease-in-out both;
+}
+
+.loading-dots span:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.loading-dots span:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+@keyframes loadingDots {
+  0%, 80%, 100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+  }
+}
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+  .upgrade-prompt-overlay {
+    padding: 16px;
+  }
+  
+  .upgrade-prompt {
+    border-radius: 16px;
+  }
+  
+  .prompt-header {
+    padding: 20px;
+  }
+  
+  .prompt-header h2 {
+    font-size: 20px;
+  }
+  
+  .prompt-body {
+    padding: 24px 20px;
+  }
+  
+  .reason-icon {
+    font-size: 48px;
+  }
+  
+  .reason-message h3 {
+    font-size: 18px;
+  }
+  
+  .reason-message p {
+    font-size: 14px;
+  }
+  
+  .prompt-footer {
+    flex-direction: column;
+    padding: 0 20px 20px 20px;
+  }
+  
+  .witty-message {
+    padding: 32px 24px;
+  }
+  
+  .witty-message h2 {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .upgrade-prompt-overlay {
+    padding: 8px;
+  }
+  
+  .prompt-header h2 {
+    font-size: 18px;
+  }
+  
+  .reason-icon {
+    font-size: 40px;
+  }
+  
+  .witty-message h2 {
+    font-size: 20px;
+  }
+}

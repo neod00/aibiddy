@@ -1,62 +1,102 @@
 import React, { useState } from 'react';
-import { usePayment } from '../contexts/PaymentContext';
 import { useAuth } from '../contexts/AuthContext';
-import PricingCard from '../components/PricingCard';
-import PaymentModal from '../components/PaymentModal';
+import UpgradePrompt from '../components/UpgradePrompt';
 import './PricingPage.css';
 
 const PricingPage: React.FC = () => {
-  const { plans, selectedPlan, setSelectedPlan, loading } = usePayment();
   const { user } = useAuth();
-  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
+  const [upgradeReason, setUpgradeReason] = useState<'ai_limit' | 'condition_limit' | 'general'>('general');
 
-  const handlePlanSelect = (plan: any) => {
-    setSelectedPlan(plan);
-  };
-
-  const handleUpgrade = () => {
+  const handleUpgrade = (reason: 'ai_limit' | 'condition_limit' | 'general' = 'general') => {
     if (user) {
-      setShowPaymentModal(true);
+      setUpgradeReason(reason);
+      setShowUpgradePrompt(true);
     } else {
       // 로그인 페이지로 리다이렉트
       window.location.href = '/login';
     }
   };
 
-  const handlePaymentSuccess = () => {
-    setShowPaymentModal(false);
-    // 성공 메시지 표시 또는 리다이렉트
-    alert('결제가 완료되었습니다! 계정이 업그레이드되었습니다.');
+  const handleUpgradeConfirm = () => {
+    setShowUpgradePrompt(false);
+    // 실제로는 계정 타입을 premium으로 변경
+    alert('🍽️ 밥 한 번 쏘겠습니다! 프리미엄 계정으로 업그레이드되었습니다!');
   };
 
   return (
     <div className="pricing-page">
       <div className="pricing-header">
-        <h1>💳 요금제 선택</h1>
-        <p>AI낙찰이의 다양한 기능을 활용해보세요</p>
+        <h1>🍽️ 밥 한 번 쏘겠습니다!</h1>
+        <p>AI낙찰이의 프리미엄 기능을 무료로 체험해보세요</p>
       </div>
 
       <div className="pricing-content">
         <div className="plans-grid">
-          {plans.map((plan) => (
-            <PricingCard
-              key={plan.id}
-              plan={plan}
-              isSelected={selectedPlan?.id === plan.id}
-              onSelect={handlePlanSelect}
-              loading={loading}
-            />
-          ))}
+          <div className="plan-card free">
+            <div className="plan-header">
+              <h3>무료</h3>
+              <div className="plan-price">무료</div>
+            </div>
+            <div className="plan-features">
+              <ul>
+                <li>🔍 입찰공고 검색 무제한</li>
+                <li>🤖 AI 요약 10회/월</li>
+                <li>🔔 알림 조건 3개</li>
+                <li>📱 모바일 최적화</li>
+              </ul>
+            </div>
+            <div className="plan-status">
+              <span className="current-plan">현재 플랜</span>
+            </div>
+          </div>
+
+          <div className="plan-card premium">
+            <div className="plan-badge">인기</div>
+            <div className="plan-header">
+              <h3>프리미엄</h3>
+              <div className="plan-price">밥 한 번 쏘겠습니다!</div>
+            </div>
+            <div className="plan-features">
+              <ul>
+                <li>🔍 입찰공고 검색 무제한</li>
+                <li>🤖 AI 요약 무제한</li>
+                <li>🔔 알림 조건 10개</li>
+                <li>📊 고급 분석 도구</li>
+                <li>📧 우선 지원</li>
+                <li>📤 CSV 내보내기</li>
+              </ul>
+            </div>
+            <div className="plan-actions">
+              <button 
+                className="upgrade-btn"
+                onClick={() => handleUpgrade('general')}
+              >
+                🍽️ 밥 한 번 쏘겠습니다!
+              </button>
+            </div>
+          </div>
         </div>
 
-        <div className="pricing-actions">
-          <button
-            className="upgrade-button"
-            onClick={handleUpgrade}
-            disabled={!selectedPlan || loading}
-          >
-            {selectedPlan ? '업그레이드하기' : '플랜을 선택하세요'}
-          </button>
+        <div className="upgrade-reasons">
+          <h2>언제 업그레이드하나요?</h2>
+          <div className="reasons-grid">
+            <div className="reason-card" onClick={() => handleUpgrade('ai_limit')}>
+              <div className="reason-icon">🤖</div>
+              <h3>AI 요약 한도 초과</h3>
+              <p>AI가 10번 일한 후에는 "밥 한 번 쏘겠습니다!" 버튼이 나타납니다</p>
+            </div>
+            <div className="reason-card" onClick={() => handleUpgrade('condition_limit')}>
+              <div className="reason-icon">🔔</div>
+              <h3>알림 조건 한도 초과</h3>
+              <p>3개 조건을 넘으면 "밥 한 번 쏘겠습니다!" 버튼이 나타납니다</p>
+            </div>
+            <div className="reason-card" onClick={() => handleUpgrade('general')}>
+              <div className="reason-icon">🚀</div>
+              <h3>더 많은 기능 원할 때</h3>
+              <p>언제든지 "밥 한 번 쏘겠습니다!" 버튼을 눌러 업그레이드하세요</p>
+            </div>
+          </div>
         </div>
 
         <div className="pricing-features">
@@ -97,29 +137,30 @@ const PricingPage: React.FC = () => {
           <h2>자주 묻는 질문</h2>
           <div className="faq-list">
             <div className="faq-item">
-              <h3>언제든지 플랜을 변경할 수 있나요?</h3>
-              <p>네, 언제든지 플랜을 변경하거나 취소할 수 있습니다. 변경사항은 다음 결제 주기부터 적용됩니다.</p>
+              <h3>정말로 밥을 사주시나요? 🍽️</h3>
+              <p>아니요! "밥 한 번 쏘겠습니다"는 재미있는 표현일 뿐입니다. 실제로는 무료로 프리미엄 기능을 사용할 수 있어요.</p>
             </div>
             <div className="faq-item">
-              <h3>무료 체험 기간이 있나요?</h3>
-              <p>무료 플랜으로 제한된 기능을 체험해보실 수 있습니다. 프리미엄 플랜은 7일 무료 체험을 제공합니다.</p>
+              <h3>언제든지 업그레이드할 수 있나요?</h3>
+              <p>네, 언제든지 "밥 한 번 쏘겠습니다!" 버튼을 눌러 프리미엄 계정으로 업그레이드할 수 있습니다.</p>
             </div>
             <div className="faq-item">
-              <h3>결제는 어떻게 이루어지나요?</h3>
-              <p>안전한 Stripe 결제 시스템을 통해 신용카드로 결제됩니다. 모든 결제 정보는 암호화되어 보호됩니다.</p>
+              <h3>업그레이드 후 되돌릴 수 있나요?</h3>
+              <p>물론입니다! 언제든지 무료 계정으로 되돌릴 수 있습니다. 다만 프리미엄 기능은 사용할 수 없게 됩니다.</p>
             </div>
             <div className="faq-item">
-              <h3>환불 정책은 어떻게 되나요?</h3>
-              <p>결제 후 7일 이내에는 전액 환불이 가능합니다. 더 자세한 내용은 고객지원팀에 문의해주세요.</p>
+              <h3>왜 이런 재미있는 방식을 사용하나요?</h3>
+              <p>복잡한 결제 시스템 대신 사용자에게 즐거운 경험을 제공하고 싶어서요! 😊</p>
             </div>
           </div>
         </div>
       </div>
 
-      <PaymentModal
-        isOpen={showPaymentModal}
-        onClose={() => setShowPaymentModal(false)}
-        onSuccess={handlePaymentSuccess}
+      <UpgradePrompt
+        isOpen={showUpgradePrompt}
+        onClose={() => setShowUpgradePrompt(false)}
+        onUpgrade={handleUpgradeConfirm}
+        reason={upgradeReason}
       />
     </div>
   );

@@ -17,6 +17,19 @@
 .env.development.local
 .env.test.local
 .env.production.local
+.env
+
+# API keys and secrets
+*.key
+*.pem
+credentials.json
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+Thumbs.db
 
 npm-debug.log*
 yarn-debug.log*

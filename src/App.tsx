@@ -8,6 +8,7 @@ import UserMenu from './components/UserMenu';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ConditionProvider } from './contexts/ConditionContext';
 import ConditionList from './components/ConditionList';
+import NotificationTest from './components/NotificationTest';
 import { SearchFormData, BidItem, BidSearchParams } from './types/bid';
 import bidService from './services/bidService';
 
@@ -19,7 +20,7 @@ function AppContent() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const [activeTab, setActiveTab] = useState<'search' | 'conditions'>('search');
+  const [activeTab, setActiveTab] = useState<'search' | 'conditions' | 'test'>('search');
   const [searchParams, setSearchParams] = useState<SearchFormData>({
     keyword: '',
     type: '',
@@ -128,6 +129,12 @@ function AppContent() {
               >
                 🔔 알림 조건 관리
               </button>
+              <button
+                className={`tab-button ${activeTab === 'test' ? 'active' : ''}`}
+                onClick={() => setActiveTab('test')}
+              >
+                🧪 알림 테스트
+              </button>
             </div>
           )}
 
@@ -170,6 +177,10 @@ function AppContent() {
 
           {activeTab === 'conditions' && user && (
             <ConditionList />
+          )}
+
+          {activeTab === 'test' && user && (
+            <NotificationTest />
           )}
 
           {!user && (

@@ -6,6 +6,8 @@ import Pagination from './components/Pagination';
 import AuthModal from './components/AuthModal';
 import UserMenu from './components/UserMenu';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { ConditionProvider } from './contexts/ConditionContext';
+import ConditionList from './components/ConditionList';
 import { SearchFormData, BidItem, BidSearchParams } from './types/bid';
 import bidService from './services/bidService';
 
@@ -17,6 +19,7 @@ function AppContent() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [activeTab, setActiveTab] = useState<'search' | 'conditions'>('search');
   const [searchParams, setSearchParams] = useState<SearchFormData>({
     keyword: '',
     type: '',
@@ -111,37 +114,77 @@ function AppContent() {
 
       <main className="app-main">
         <div className="container">
-          <SearchForm onSearch={handleSearch} loading={loading} />
-          
-          {error && (
-            <div className="error-message">
-              <div className="error-icon">⚠️</div>
-              <div className="error-content">
-                <h3>오류가 발생했습니다</h3>
-                <p>{error}</p>
-                <button 
-                  onClick={() => fetchBids(searchParams, currentPage)}
-                  className="retry-btn"
-                >
-                  다시 시도
-                </button>
-              </div>
+          {user && (
+            <div className="tab-navigation">
+              <button
+                className={`tab-button ${activeTab === 'search' ? 'active' : ''}`}
+                onClick={() => setActiveTab('search')}
+              >
+                🔍 입찰공고 검색
+              </button>
+              <button
+                className={`tab-button ${activeTab === 'conditions' ? 'active' : ''}`}
+                onClick={() => setActiveTab('conditions')}
+              >
+                🔔 알림 조건 관리
+              </button>
             </div>
           )}
 
-          <BidList 
-            bids={bids} 
-            loading={loading} 
-            onBidClick={handleBidClick}
-          />
+          {activeTab === 'search' && (
+            <>
+              <SearchForm onSearch={handleSearch} loading={loading} />
+              
+              {error && (
+                <div className="error-message">
+                  <div className="error-icon">⚠️</div>
+                  <div className="error-content">
+                    <h3>오류가 발생했습니다</h3>
+                    <p>{error}</p>
+                    <button 
+                      onClick={() => fetchBids(searchParams, currentPage)}
+                      className="retry-btn"
+                    >
+                      다시 시도
+                    </button>
+                  </div>
+                </div>
+              )}
 
-          {bids.length > 0 && (
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={handlePageChange}
-              loading={loading}
-            />
+              <BidList 
+                bids={bids} 
+                loading={loading} 
+                onBidClick={handleBidClick}
+              />
+
+              {bids.length > 0 && (
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={handlePageChange}
+                  loading={loading}
+                />
+              )}
+            </>
+          )}
+
+          {activeTab === 'conditions' && user && (
+            <ConditionList />
+          )}
+
+          {!user && (
+            <div className="login-prompt">
+              <div className="login-prompt-content">
+                <h3>로그인이 필요합니다</h3>
+                <p>알림 조건을 관리하려면 먼저 로그인해주세요.</p>
+                <button
+                  className="btn btn-primary"
+                  onClick={() => setShowAuthModal(true)}
+                >
+                  로그인하기
+                </button>
+              </div>
+            </div>
           )}
         </div>
       </main>
@@ -164,7 +207,9 @@ function AppContent() {
 function App() {
   return (
     <AuthProvider>
-      <AppContent />
+      <ConditionProvider>
+        <AppContent />
+      </ConditionProvider>
     </AuthProvider>
   );
 }

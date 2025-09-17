@@ -1,15 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import { AuthProvider } from './contexts/AuthContext';
 import { ConditionProvider } from './contexts/ConditionContext';
 import { SummaryProvider } from './contexts/SummaryContext';
+import ErrorBoundary from './components/ErrorBoundary';
+import { initGA } from './utils/analytics';
 import HomePage from './pages/HomePage';
 import BidDetailPage from './pages/BidDetailPage';
 import PricingPage from './pages/PricingPage';
 import AppLayout from './components/AppLayout';
 
 function AppContent() {
+  useEffect(() => {
+    // Google Analytics 초기화
+    initGA();
+  }, []);
+
   return (
     <Router>
       <AppLayout>
@@ -25,13 +32,15 @@ function AppContent() {
 
 function App() {
   return (
-    <AuthProvider>
-      <ConditionProvider>
-        <SummaryProvider>
-          <AppContent />
-        </SummaryProvider>
-      </ConditionProvider>
-    </AuthProvider>
+    <ErrorBoundary>
+      <AuthProvider>
+        <ConditionProvider>
+          <SummaryProvider>
+            <AppContent />
+          </SummaryProvider>
+        </ConditionProvider>
+      </AuthProvider>
+    </ErrorBoundary>
   );
 }
 

@@ -1,0 +1,237 @@
+/* 요금제 페이지 스타일 */
+.pricing-page {
+  min-height: 100vh;
+  background: #f8fafc;
+  padding: 40px 0;
+}
+
+.pricing-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.pricing-header h1 {
+  margin: 0 0 16px 0;
+  color: #111827;
+  font-size: 36px;
+  font-weight: 700;
+}
+
+.pricing-header p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 18px;
+}
+
+.pricing-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  margin-bottom: 48px;
+}
+
+.pricing-actions {
+  text-align: center;
+  margin-bottom: 64px;
+}
+
+.upgrade-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 16px 32px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.upgrade-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+}
+
+.upgrade-button:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.pricing-features {
+  margin-bottom: 64px;
+}
+
+.pricing-features h2 {
+  text-align: center;
+  margin: 0 0 32px 0;
+  color: #111827;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+}
+
+.feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+}
+
+.feature-icon {
+  font-size: 32px;
+  flex-shrink: 0;
+}
+
+.feature-content h3 {
+  margin: 0 0 8px 0;
+  color: #111827;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.feature-content p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.pricing-faq {
+  background: white;
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+}
+
+.pricing-faq h2 {
+  text-align: center;
+  margin: 0 0 32px 0;
+  color: #111827;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.faq-item {
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 24px;
+}
+
+.faq-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.faq-item h3 {
+  margin: 0 0 12px 0;
+  color: #111827;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.faq-item p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+  .pricing-page {
+    padding: 20px 0;
+  }
+  
+  .pricing-header h1 {
+    font-size: 28px;
+  }
+  
+  .pricing-header p {
+    font-size: 16px;
+  }
+  
+  .pricing-content {
+    padding: 0 16px;
+  }
+  
+  .plans-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  
+  .pricing-actions {
+    margin-bottom: 48px;
+  }
+  
+  .upgrade-button {
+    padding: 14px 28px;
+    font-size: 16px;
+  }
+  
+  .pricing-features h2,
+  .pricing-faq h2 {
+    font-size: 24px;
+  }
+  
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .feature-item {
+    padding: 20px;
+  }
+  
+  .pricing-faq {
+    padding: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .pricing-header h1 {
+    font-size: 24px;
+  }
+  
+  .pricing-header p {
+    font-size: 14px;
+  }
+  
+  .upgrade-button {
+    padding: 12px 24px;
+    font-size: 14px;
+  }
+  
+  .feature-item {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .feature-icon {
+    font-size: 28px;
+  }
+}

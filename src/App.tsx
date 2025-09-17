@@ -7,8 +7,10 @@ import AuthModal from './components/AuthModal';
 import UserMenu from './components/UserMenu';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ConditionProvider } from './contexts/ConditionContext';
+import { SummaryProvider } from './contexts/SummaryContext';
 import ConditionList from './components/ConditionList';
 import NotificationTest from './components/NotificationTest';
+import BidSummaryModal from './components/BidSummaryModal';
 import { SearchFormData, BidItem, BidSearchParams } from './types/bid';
 import bidService from './services/bidService';
 
@@ -21,6 +23,8 @@ function AppContent() {
   const [totalPages, setTotalPages] = useState(1);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [activeTab, setActiveTab] = useState<'search' | 'conditions' | 'test'>('search');
+  const [selectedBid, setSelectedBid] = useState<BidItem | null>(null);
+  const [showSummaryModal, setShowSummaryModal] = useState(false);
   const [searchParams, setSearchParams] = useState<SearchFormData>({
     keyword: '',
     type: '',
@@ -78,9 +82,8 @@ function AppContent() {
   };
 
   const handleBidClick = (bid: BidItem) => {
-    // TODO: 입찰공고 상세 모달 또는 페이지로 이동
-    console.log('입찰공고 클릭:', bid);
-    alert(`입찰공고 상세: ${bid.bidNtceNm}`);
+    setSelectedBid(bid);
+    setShowSummaryModal(true);
   };
 
   // 초기 로드 시 기본 검색
@@ -211,6 +214,15 @@ function AppContent() {
         onClose={() => setShowAuthModal(false)}
         initialMode="login"
       />
+
+      <BidSummaryModal
+        isOpen={showSummaryModal}
+        onClose={() => {
+          setShowSummaryModal(false);
+          setSelectedBid(null);
+        }}
+        bid={selectedBid}
+      />
     </div>
   );
 }
@@ -219,7 +231,9 @@ function App() {
   return (
     <AuthProvider>
       <ConditionProvider>
-        <AppContent />
+        <SummaryProvider>
+          <AppContent />
+        </SummaryProvider>
       </ConditionProvider>
     </AuthProvider>
   );

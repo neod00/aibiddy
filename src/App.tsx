@@ -3,15 +3,20 @@ import './App.css';
 import SearchForm from './components/SearchForm';
 import BidList from './components/BidList';
 import Pagination from './components/Pagination';
+import AuthModal from './components/AuthModal';
+import UserMenu from './components/UserMenu';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { SearchFormData, BidItem, BidSearchParams } from './types/bid';
 import bidService from './services/bidService';
 
-function App() {
+function AppContent() {
+  const { user } = useAuth();
   const [bids, setBids] = useState<BidItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const [searchParams, setSearchParams] = useState<SearchFormData>({
     keyword: '',
     type: '',
@@ -83,8 +88,24 @@ function App() {
     <div className="App">
       <header className="app-header">
         <div className="container">
-          <h1>🏛️ AI낙찰이</h1>
-          <p>나라장터 입찰공고를 쉽고 빠르게 찾아보세요</p>
+          <div className="header-content">
+            <div className="header-left">
+              <h1>🏛️ AI낙찰이</h1>
+              <p>나라장터 입찰공고를 쉽고 빠르게 찾아보세요</p>
+            </div>
+            <div className="header-right">
+              {user ? (
+                <UserMenu />
+              ) : (
+                <button 
+                  className="login-btn"
+                  onClick={() => setShowAuthModal(true)}
+                >
+                  로그인
+                </button>
+              )}
+            </div>
+          </div>
         </div>
       </header>
 
@@ -130,7 +151,21 @@ function App() {
           <p>&copy; 2024 AI낙찰이. 나라장터 데이터를 활용한 입찰공고 검색 서비스</p>
         </div>
       </footer>
+
+      <AuthModal 
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        initialMode="login"
+      />
     </div>
+  );
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 }
 

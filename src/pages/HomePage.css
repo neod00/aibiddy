@@ -1,0 +1,88 @@
+/* 홈페이지 스타일 */
+.home-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px 0;
+}
+
+.search-section {
+  margin-bottom: 32px;
+}
+
+.results-section {
+  margin-bottom: 32px;
+}
+
+.pagination-section {
+  display: flex;
+  justify-content: center;
+  margin-top: 32px;
+}
+
+.error-message {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 20px 0;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.error-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.error-content h3 {
+  margin: 0 0 8px 0;
+  color: #dc2626;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.error-content p {
+  margin: 0 0 16px 0;
+  color: #7f1d1d;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.retry-btn {
+  background: #dc2626;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.retry-btn:hover {
+  background: #b91c1c;
+  transform: translateY(-1px);
+}
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+  .home-page {
+    padding: 16px 0;
+  }
+  
+  .error-message {
+    margin: 16px;
+    padding: 16px;
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .error-icon {
+    font-size: 20px;
+  }
+}

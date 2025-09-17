@@ -100,8 +100,6 @@ const BidList: React.FC<BidListProps> = memo(({ bids, loading, onBidClick }) => 
       </div>
     </div>
   );
-};
-
 });
 
 BidList.displayName = 'BidList';

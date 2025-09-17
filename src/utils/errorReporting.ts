@@ -153,14 +153,10 @@ export class ErrorBoundary extends React.Component<
 
   render() {
     if (this.state.hasError) {
-      return this.props.fallback || (
-        <div className="error-boundary">
-          <h2>문제가 발생했습니다</h2>
-          <p>페이지를 새로고침하거나 잠시 후 다시 시도해주세요.</p>
-          <button onClick={() => window.location.reload()}>
-            새로고침
-          </button>
-        </div>
+      return this.props.fallback || React.createElement('div', { className: 'error-boundary' },
+        React.createElement('h2', null, '문제가 발생했습니다'),
+        React.createElement('p', null, '페이지를 새로고침하거나 잠시 후 다시 시도해주세요.'),
+        React.createElement('button', { onClick: () => window.location.reload() }, '새로고침')
       );
     }
 

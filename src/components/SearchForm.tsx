@@ -152,8 +152,6 @@ const SearchForm: React.FC<SearchFormProps> = memo(({ onSearch, loading }) => {
       </form>
     </div>
   );
-};
-
 });
 
 SearchForm.displayName = 'SearchForm';

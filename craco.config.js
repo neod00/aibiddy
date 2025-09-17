@@ -3,6 +3,7 @@ const webpack = require('webpack');
 module.exports = {
   webpack: {
     configure: (webpackConfig) => {
+      // Node.js polyfills
       webpackConfig.resolve.fallback = {
         ...webpackConfig.resolve.fallback,
         crypto: require.resolve('crypto-browserify'),
@@ -25,6 +26,7 @@ module.exports = {
         http2: false,
       };
       
+      // Alias 설정
       webpackConfig.resolve.alias = {
         ...webpackConfig.resolve.alias,
         'node:buffer': 'buffer',
@@ -40,8 +42,28 @@ module.exports = {
         'node:assert': 'assert/',
       };
       
+      // Module rules
       webpackConfig.module.rules.push({
         test: /\.m?js$/,
+        resolve: {
+          fullySpecified: false,
+        },
+      });
+
+      // node: 스키마 처리
+      webpackConfig.module.rules.push({
+        test: /\.m?js$/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env'],
+            plugins: [
+              '@babel/plugin-syntax-import-meta',
+              ['@babel/plugin-proposal-optional-chaining', { loose: true }],
+              ['@babel/plugin-proposal-nullish-coalescing-operator', { loose: true }],
+            ],
+          },
+        },
         resolve: {
           fullySpecified: false,
         },
@@ -68,6 +90,7 @@ module.exports = {
         },
       };
       
+      // Plugins
       webpackConfig.plugins = [
         ...webpackConfig.plugins,
         new webpack.ProvidePlugin({

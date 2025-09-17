@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, memo, useCallback } from 'react';
 import { SearchFormData } from '../types/bid';
 import './SearchForm.css';
 
@@ -7,7 +7,7 @@ interface SearchFormProps {
   loading: boolean;
 }
 
-const SearchForm: React.FC<SearchFormProps> = ({ onSearch, loading }) => {
+const SearchForm: React.FC<SearchFormProps> = memo(({ onSearch, loading }) => {
   const [formData, setFormData] = useState<SearchFormData>({
     keyword: '',
     type: '',
@@ -17,20 +17,20 @@ const SearchForm: React.FC<SearchFormProps> = ({ onSearch, loading }) => {
     region: '',
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: value,
     }));
-  };
+  }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     onSearch(formData);
-  };
+  }, [onSearch, formData]);
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     setFormData({
       keyword: '',
       type: '',
@@ -39,7 +39,7 @@ const SearchForm: React.FC<SearchFormProps> = ({ onSearch, loading }) => {
       agency: '',
       region: '',
     });
-  };
+  }, []);
 
   return (
     <div className="search-form-container">
@@ -153,5 +153,9 @@ const SearchForm: React.FC<SearchFormProps> = ({ onSearch, loading }) => {
     </div>
   );
 };
+
+});
+
+SearchForm.displayName = 'SearchForm';
 
 export default SearchForm;

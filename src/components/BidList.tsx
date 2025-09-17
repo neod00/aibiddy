@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo, useCallback } from 'react';
 import { BidItem } from '../types/bid';
 import './BidList.css';
 
@@ -8,15 +8,15 @@ interface BidListProps {
   onBidClick: (bid: BidItem) => void;
 }
 
-const BidList: React.FC<BidListProps> = ({ bids, loading, onBidClick }) => {
-  const formatAmount = (amount: string) => {
+const BidList: React.FC<BidListProps> = memo(({ bids, loading, onBidClick }) => {
+  const formatAmount = useCallback((amount: string) => {
     if (!amount) return '미정';
     const num = parseInt(amount);
     if (isNaN(num)) return amount;
     return `${num.toLocaleString()}만원`;
-  };
+  }, []);
 
-  const formatDate = (dateStr: string) => {
+  const formatDate = useCallback((dateStr: string) => {
     if (!dateStr) return '미정';
     const date = new Date(dateStr);
     return date.toLocaleDateString('ko-KR', {
@@ -26,7 +26,7 @@ const BidList: React.FC<BidListProps> = ({ bids, loading, onBidClick }) => {
       hour: '2-digit',
       minute: '2-digit',
     });
-  };
+  }, []);
 
   if (loading) {
     return (
@@ -101,5 +101,9 @@ const BidList: React.FC<BidListProps> = ({ bids, loading, onBidClick }) => {
     </div>
   );
 };
+
+});
+
+BidList.displayName = 'BidList';
 
 export default BidList;

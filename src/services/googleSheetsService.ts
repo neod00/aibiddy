@@ -150,7 +150,7 @@ class GoogleSheetsService {
   }
 
   // 조건 저장
-  async addCondition(condition: Omit<SearchCondition, 'id' | 'userId' | 'createdAt'>): Promise<string> {
+  async addCondition(condition: Omit<SearchCondition, 'id' | 'createdAt'>): Promise<string> {
     try {
       const response = await fetch('/.netlify/functions/save-condition', {
         method: 'POST',

@@ -3,7 +3,8 @@ const nodemailer = require('nodemailer');
 
 // 환경변수 설정
 const GOOGLE_SHEETS_ID = process.env.GOOGLE_SHEETS_ID;
-const GOOGLE_SHEETS_CREDENTIALS = process.env.GOOGLE_SHEETS_CREDENTIALS;
+const GOOGLE_SHEETS_CLIENT_EMAIL = process.env.GOOGLE_SHEETS_CLIENT_EMAIL;
+const GOOGLE_SHEETS_PRIVATE_KEY = process.env.GOOGLE_SHEETS_PRIVATE_KEY;
 const GMAIL_USER = process.env.REACT_APP_GMAIL_USER;
 const GMAIL_PASSWORD = process.env.REACT_APP_GMAIL_APP_PASSWORD;
 const NARA_API_KEY = process.env.NARA_API_KEY;
@@ -23,7 +24,19 @@ if (GMAIL_USER && GMAIL_PASSWORD) {
 
 // Google Sheets API 초기화
 const auth = new google.auth.GoogleAuth({
-  credentials: JSON.parse(GOOGLE_SHEETS_CREDENTIALS),
+  credentials: {
+    type: 'service_account',
+    project_id: 'ai-biddy',
+    private_key_id: process.env.GOOGLE_SHEETS_PRIVATE_KEY_ID,
+    private_key: GOOGLE_SHEETS_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+    client_email: GOOGLE_SHEETS_CLIENT_EMAIL,
+    client_id: process.env.GOOGLE_SHEETS_CLIENT_ID,
+    auth_uri: 'https://accounts.google.com/o/oauth2/auth',
+    token_uri: 'https://oauth2.googleapis.com/token',
+    auth_provider_x509_cert_url: 'https://www.googleapis.com/oauth2/v1/certs',
+    client_x509_cert_url: `https://www.googleapis.com/robot/v1/metadata/x509/${encodeURIComponent(GOOGLE_SHEETS_CLIENT_EMAIL)}`,
+    universe_domain: 'googleapis.com'
+  },
   scopes: ['https://www.googleapis.com/auth/spreadsheets'],
 });
 

@@ -22,17 +22,7 @@
 [functions]
   directory = "netlify/functions"
 
-# Scheduled Functions 설정
-[[plugins]]
-  package = "@netlify/plugin-scheduled-functions"
-
-[plugins.inputs]
-  # 매시간 실행 (1시간마다)
-  - schedule = "0 * * * *"
-    function = "scheduler"
-  # 매일 09:00 실행 (일일 알림)
-  - schedule = "0 9 * * *"
-    function = "scheduler"
+# Functions 설정 (scheduled functions는 나중에 추가)
 
 [[headers]]
   for = "/*"

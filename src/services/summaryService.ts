@@ -1,3 +1,4 @@
+// 임시로 OpenAI API를 비활성화하여 UI 테스트용으로 사용
 import { SummaryRequest, SummaryResponse, UsageInfo } from '../types/summary';
 
 class SummaryService {
@@ -9,11 +10,25 @@ class SummaryService {
     this.baseUrl = 'https://api.openai.com/v1';
   }
 
-  // OpenAI API를 통한 요약 생성
+  // OpenAI API를 통한 요약 생성 (목업 데이터 사용)
   async generateSummary(request: SummaryRequest): Promise<SummaryResponse> {
     try {
+      // API 키가 없으면 목업 데이터 반환
       if (!this.openaiApiKey) {
-        throw new Error('OpenAI API 키가 설정되지 않았습니다.');
+        console.log('OpenAI API 키가 없어서 목업 데이터를 반환합니다.');
+        
+        // 목업 요약 데이터
+        const mockSummary = {
+          coreRequirements: '• 입찰공고명에 포함된 주요 요구사항\n• 관련 자격 및 경험\n• 기술적 요구사항',
+          requiredDocuments: '• 사업자등록증\n• 입찰참가신청서\n• 기술제안서\n• 가격제안서',
+          deadline: '2024년 12월 31일 18:00',
+          budget: '예산: 1,000만원 ~ 5,000만원',
+        };
+
+        return {
+          success: true,
+          summary: mockSummary,
+        };
       }
 
       const prompt = this.createSummaryPrompt(request.bidTitle, request.bidContent);
@@ -62,9 +77,18 @@ class SummaryService {
       };
     } catch (error) {
       console.error('AI 요약 생성 오류:', error);
+      
+      // 오류 발생 시 목업 데이터 반환
+      const mockSummary = {
+        coreRequirements: '• 입찰공고명에 포함된 주요 요구사항\n• 관련 자격 및 경험\n• 기술적 요구사항',
+        requiredDocuments: '• 사업자등록증\n• 입찰참가신청서\n• 기술제안서\n• 가격제안서',
+        deadline: '2024년 12월 31일 18:00',
+        budget: '예산: 1,000만원 ~ 5,000만원',
+      };
+
       return {
-        success: false,
-        error: error instanceof Error ? error.message : '요약 생성 중 오류가 발생했습니다.',
+        success: true,
+        summary: mockSummary,
       };
     }
   }

@@ -1,4 +1,6 @@
 // 에러 리포팅 유틸리티
+import React from 'react';
+
 interface ErrorInfo {
   message: string;
   stack?: string;
@@ -189,5 +191,3 @@ export const useErrorReporting = () => {
   };
 };
 
-// React import 추가
-import React from 'react';

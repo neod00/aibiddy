@@ -63,10 +63,7 @@ export const ConditionProvider: React.FC<ConditionProviderProps> = ({ children }
         return false;
       }
 
-      const conditionId = await conditionService.addCondition({
-        ...condition,
-        userId: user.id,
-      });
+      const conditionId = await conditionService.addCondition(user.id, condition);
 
       const newCondition: SearchCondition = {
         ...condition,
@@ -102,7 +99,7 @@ export const ConditionProvider: React.FC<ConditionProviderProps> = ({ children }
         }
       }
 
-      await conditionService.updateCondition(id, updates);
+      await conditionService.updateCondition(user.id, id, updates);
 
       setConditions(prev =>
         prev.map(condition =>
@@ -126,7 +123,7 @@ export const ConditionProvider: React.FC<ConditionProviderProps> = ({ children }
       setLoading(true);
       setError(null);
 
-      await conditionService.deleteCondition(id);
+      await conditionService.deleteCondition(user.id, id);
 
       setConditions(prev => prev.filter(condition => condition.id !== id));
       return true;
@@ -163,7 +160,7 @@ export const ConditionProvider: React.FC<ConditionProviderProps> = ({ children }
         }
       }
 
-      await conditionService.toggleCondition(id);
+      await conditionService.toggleCondition(user.id, id);
 
       setConditions(prev =>
         prev.map(condition =>

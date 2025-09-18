@@ -24,24 +24,24 @@ class ConditionService {
   }
 
   // 조건 추가
-  async addCondition(condition: Omit<SearchCondition, 'id' | 'userId' | 'createdAt'>): Promise<string> {
+  async addCondition(userId: string, condition: Omit<SearchCondition, 'id' | 'userId' | 'createdAt'>): Promise<string> {
     try {
       const conditionId = `condition_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
       
       const newCondition: SearchCondition = {
         ...condition,
         id: conditionId,
-        userId: '', // 실제로는 현재 사용자 ID
+        userId: userId,
         createdAt: new Date().toISOString(),
       };
 
       // 실제 구현에서는 Google Sheets API 호출
       // 현재는 로컬 스토리지 사용 (개발용)
-      const existing = localStorage.getItem(`conditions_${newCondition.userId}`) || '[]';
+      const existing = localStorage.getItem(`conditions_${userId}`) || '[]';
       const conditions: GoogleSheetsCondition[] = JSON.parse(existing);
       
       conditions.push(this.mapConditionToGoogleSheets(newCondition));
-      localStorage.setItem(`conditions_${newCondition.userId}`, JSON.stringify(conditions));
+      localStorage.setItem(`conditions_${userId}`, JSON.stringify(conditions));
 
       return conditionId;
     } catch (error) {
@@ -51,11 +51,10 @@ class ConditionService {
   }
 
   // 조건 업데이트
-  async updateCondition(conditionId: string, updates: Partial<SearchCondition>): Promise<void> {
+  async updateCondition(userId: string, conditionId: string, updates: Partial<SearchCondition>): Promise<void> {
     try {
       // 실제 구현에서는 Google Sheets API 호출
       // 현재는 로컬 스토리지 사용 (개발용)
-      const userId = ''; // 실제로는 현재 사용자 ID
       const stored = localStorage.getItem(`conditions_${userId}`);
       if (!stored) throw new Error('조건을 찾을 수 없습니다.');
 
@@ -77,11 +76,10 @@ class ConditionService {
   }
 
   // 조건 삭제
-  async deleteCondition(conditionId: string): Promise<void> {
+  async deleteCondition(userId: string, conditionId: string): Promise<void> {
     try {
       // 실제 구현에서는 Google Sheets API 호출
       // 현재는 로컬 스토리지 사용 (개발용)
-      const userId = ''; // 실제로는 현재 사용자 ID
       const stored = localStorage.getItem(`conditions_${userId}`);
       if (!stored) throw new Error('조건을 찾을 수 없습니다.');
 
@@ -96,9 +94,8 @@ class ConditionService {
   }
 
   // 조건 활성화/비활성화 토글
-  async toggleCondition(conditionId: string): Promise<void> {
+  async toggleCondition(userId: string, conditionId: string): Promise<void> {
     try {
-      const userId = ''; // 실제로는 현재 사용자 ID
       const stored = localStorage.getItem(`conditions_${userId}`);
       if (!stored) throw new Error('조건을 찾을 수 없습니다.');
 

@@ -1,15 +1,25 @@
 const { google } = require('googleapis');
-const sgMail = require('@sendgrid/mail');
+const nodemailer = require('nodemailer');
 
 // 환경변수 설정
 const GOOGLE_SHEETS_ID = process.env.GOOGLE_SHEETS_ID;
 const GOOGLE_SHEETS_CREDENTIALS = process.env.GOOGLE_SHEETS_CREDENTIALS;
-const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
+const GMAIL_USER = process.env.REACT_APP_GMAIL_USER;
+const GMAIL_PASSWORD = process.env.REACT_APP_GMAIL_APP_PASSWORD;
 const NARA_API_KEY = process.env.NARA_API_KEY;
 const NARA_API_URL = 'https://apis.data.go.kr/1230000/ad/BidPublicInfoService';
 
-// SendGrid 설정
-sgMail.setApiKey(SENDGRID_API_KEY);
+// Gmail 전송자 설정
+let gmailTransporter = null;
+if (GMAIL_USER && GMAIL_PASSWORD) {
+  gmailTransporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: GMAIL_USER,
+      pass: GMAIL_PASSWORD,
+    },
+  });
+}
 
 // Google Sheets API 초기화
 const auth = new google.auth.GoogleAuth({
@@ -231,24 +241,30 @@ function createEmailTemplate(userEmail, condition, bids) {
   return { subject, html };
 }
 
-// 이메일 발송
+// 이메일 발송 (Gmail 사용)
 async function sendNotificationEmail(userEmail, condition, bids) {
   if (bids.length === 0) return;
+
+  if (!gmailTransporter) {
+    console.error('Gmail 설정이 없습니다. 이메일을 발송할 수 없습니다.');
+    return;
+  }
 
   try {
     const { subject, html } = createEmailTemplate(userEmail, condition, bids);
     
-    const msg = {
+    const mailOptions = {
+      from: `"AI낙찰이" <${GMAIL_USER}>`,
       to: userEmail,
-      from: process.env.FROM_EMAIL || 'noreply@ai-nakchali.com',
       subject,
       html,
+      text: html.replace(/<[^>]*>/g, ''), // HTML 태그 제거
     };
 
-    await sgMail.send(msg);
-    console.log(`이메일 발송 완료: ${userEmail} (${bids.length}건)`);
+    const result = await gmailTransporter.sendMail(mailOptions);
+    console.log(`Gmail 이메일 발송 완료: ${userEmail} (${bids.length}건) - ${result.messageId}`);
   } catch (error) {
-    console.error('이메일 발송 오류:', error);
+    console.error('Gmail 이메일 발송 오류:', error);
     throw error;
   }
 }

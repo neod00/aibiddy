@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import './UpgradePrompt.css';
 
 interface UpgradePromptProps {
+  isOpen: boolean;
   onUpgrade: () => void;
   onClose: () => void;
   reason: 'ai_limit' | 'condition_limit' | 'general';
 }
 
-const UpgradePrompt: React.FC<UpgradePromptProps> = ({ onUpgrade, onClose, reason }) => {
+const UpgradePrompt: React.FC<UpgradePromptProps> = ({ isOpen, onUpgrade, onClose, reason }) => {
   const [showWittyMessage, setShowWittyMessage] = useState(false);
 
   const getReasonMessage = () => {
@@ -41,6 +42,10 @@ const UpgradePrompt: React.FC<UpgradePromptProps> = ({ onUpgrade, onClose, reaso
       onUpgrade();
     }, 2000);
   };
+
+  if (!isOpen) {
+    return null;
+  }
 
   if (showWittyMessage) {
     return (

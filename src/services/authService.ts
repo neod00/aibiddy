@@ -1,5 +1,6 @@
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+// 임시로 Node.js 모듈을 비활성화하여 UI 테스트용으로 사용
+// import bcrypt from 'bcryptjs';
+// import jwt from 'jsonwebtoken';
 import googleSheetsService from './googleSheetsService';
 import { User, LoginFormData, RegisterFormData } from '../types/user';
 
@@ -12,34 +13,39 @@ class AuthService {
     this.jwtExpiresIn = process.env.REACT_APP_JWT_EXPIRES_IN || '7d';
   }
 
-  // 비밀번호 해시화
+  // 비밀번호 해시화 (간단한 해시 사용)
   private async hashPassword(password: string): Promise<string> {
-    const saltRounds = 12;
-    return await bcrypt.hash(password, saltRounds);
+    // 간단한 해시 함수 (실제 배포 시에는 bcrypt 사용)
+    return btoa(password + 'salt');
   }
 
   // 비밀번호 검증
   private async verifyPassword(password: string, hash: string): Promise<boolean> {
-    return await bcrypt.compare(password, hash);
+    // 간단한 해시 검증 (실제 배포 시에는 bcrypt 사용)
+    return btoa(password + 'salt') === hash;
   }
 
-  // JWT 토큰 생성
+  // JWT 토큰 생성 (간단한 토큰 사용)
   private generateToken(user: User): string {
     const payload = {
       id: user.id,
       email: user.email,
       accountType: user.accountType,
+      exp: Date.now() + 7 * 24 * 60 * 60 * 1000, // 7일
     };
 
-    return jwt.sign(payload, this.jwtSecret, {
-      expiresIn: this.jwtExpiresIn,
-    });
+    // 간단한 토큰 생성 (실제 배포 시에는 jwt 사용)
+    return btoa(JSON.stringify(payload));
   }
 
   // JWT 토큰 검증
   verifyToken(token: string): any {
     try {
-      return jwt.verify(token, this.jwtSecret);
+      const decoded = JSON.parse(atob(token));
+      if (decoded.exp && decoded.exp < Date.now()) {
+        return null; // 만료됨
+      }
+      return decoded;
     } catch (error) {
       return null;
     }

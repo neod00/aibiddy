@@ -12,9 +12,9 @@ export const initGA = () => {
 
     // gtag 함수 설정
     window.dataLayer = window.dataLayer || [];
-    function gtag(...args: any[]) {
+    const gtag = (...args: any[]) => {
       window.dataLayer.push(args);
-    }
+    };
     window.gtag = gtag;
     gtag('js', new Date());
     gtag('config', GA_TRACKING_ID, {

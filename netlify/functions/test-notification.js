@@ -1,10 +1,23 @@
-// 테스트용 알림 발송 함수
+// 테스트용 알림 발송 함수 (Gmail 사용)
 // 개발 및 테스트 목적으로 수동으로 알림을 발송할 수 있습니다.
 
-const sgMail = require('@sendgrid/mail');
+const nodemailer = require('nodemailer');
 
-// SendGrid 설정
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+// Gmail 설정
+const GMAIL_USER = process.env.REACT_APP_GMAIL_USER;
+const GMAIL_PASSWORD = process.env.REACT_APP_GMAIL_APP_PASSWORD;
+
+// Gmail 전송자 설정
+let gmailTransporter = null;
+if (GMAIL_USER && GMAIL_PASSWORD) {
+  gmailTransporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: GMAIL_USER,
+      pass: GMAIL_PASSWORD,
+    },
+  });
+}
 
 // 테스트 이메일 템플릿
 function createTestEmailTemplate() {
@@ -136,16 +149,26 @@ exports.handler = async (event, context) => {
     // 테스트 이메일 템플릿 생성
     const { subject, html } = createTestEmailTemplate();
 
-    // 이메일 발송
-    const msg = {
+    // Gmail 이메일 발송
+    if (!gmailTransporter) {
+      return {
+        statusCode: 500,
+        body: JSON.stringify({
+          error: 'Gmail 설정이 없습니다. 환경 변수를 확인해주세요.',
+        }),
+      };
+    }
+
+    const mailOptions = {
+      from: `"AI낙찰이" <${GMAIL_USER}>`,
       to: email,
-      from: process.env.FROM_EMAIL || 'noreply@ai-nakchali.com',
       subject,
       html,
+      text: html.replace(/<[^>]*>/g, ''), // HTML 태그 제거
     };
 
-    await sgMail.send(msg);
-    console.log(`테스트 이메일 발송 완료: ${email}`);
+    const result = await gmailTransporter.sendMail(mailOptions);
+    console.log(`Gmail 테스트 이메일 발송 완료: ${email} - ${result.messageId}`);
 
     return {
       statusCode: 200,

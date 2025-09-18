@@ -49,46 +49,6 @@ module.exports = {
           fullySpecified: false,
         },
       });
-
-      // node: 스키마 처리
-      webpackConfig.module.rules.push({
-        test: /\.m?js$/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env'],
-            plugins: [
-              '@babel/plugin-syntax-import-meta',
-              ['@babel/plugin-proposal-optional-chaining', { loose: true }],
-              ['@babel/plugin-proposal-nullish-coalescing-operator', { loose: true }],
-            ],
-          },
-        },
-        resolve: {
-          fullySpecified: false,
-        },
-      });
-      
-      // 성능 최적화 설정
-      webpackConfig.optimization = {
-        ...webpackConfig.optimization,
-        splitChunks: {
-          chunks: 'all',
-          cacheGroups: {
-            vendor: {
-              test: /[\\/]node_modules[\\/]/,
-              name: 'vendors',
-              chunks: 'all',
-            },
-            common: {
-              name: 'common',
-              minChunks: 2,
-              chunks: 'all',
-              enforce: true,
-            },
-          },
-        },
-      };
       
       // Plugins
       webpackConfig.plugins = [

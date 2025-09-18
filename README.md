@@ -1,42 +1,53 @@
-# AI낙찰이 (AI Bidder)
+# AI낙찰이 (AI-Biddy)
 
-공공조달 나라장터 입찰공고를 AI로 분석하고 맞춤형 알림을 제공하는 모바일 최적화 웹 애플리케이션입니다.
+조달청 OpenAPI를 활용한 AI 기반 입찰공고 분석 및 알림 서비스
 
 ## 🚀 주요 기능
 
-- **입찰공고 검색**: 키워드, 금액, 지역, 기관별 검색
-- **AI 요약**: GPT-4o-mini를 활용한 입찰공고 핵심 정보 요약
-- **조건부 알림**: 사용자 정의 조건에 따른 이메일 알림
-- **계정 관리**: 무료/프리미엄 계정 시스템
-- **모바일 최적화**: 반응형 디자인으로 모바일 환경 최적화
+### 📋 입찰공고 검색 및 분석
+- **실시간 데이터**: 조달청 OpenAPI를 통한 최신 입찰공고 정보
+- **다양한 검색 옵션**: 키워드, 기관명, 지역별, 금액 범위별 검색
+- **스마트 필터링**: 입찰공고명, 수요기관, 계약체결방법 등 세부 조건 지원
 
-## 🛠 기술 스택
+### 🤖 AI 기반 분석
+- **입찰공고 요약**: OpenAI API를 활용한 자동 요약 기능
+- **조건 분석**: 사용자 맞춤형 입찰 조건 분석
+- **알림 서비스**: 관심 입찰공고 실시간 알림
+
+### 📧 알림 시스템
+- **이메일 알림**: Gmail을 통한 입찰공고 알림
+- **Google Sheets 연동**: 입찰공고 데이터 자동 저장
+- **사용자 정의 조건**: 개인별 맞춤 알림 설정
+
+## 🛠️ 기술 스택
 
 ### Frontend
-- **React 18** with TypeScript
-- **React Router DOM** for navigation
-- **Axios** for API calls
-- **CRACO** for Webpack configuration
-- **CSS3** with mobile-first design
+- **React 18** - 최신 React 기능 활용
+- **TypeScript** - 타입 안전성 보장
+- **CSS3** - 현대적 UI/UX 디자인
+- **Context API** - 상태 관리
 
 ### Backend
-- **Netlify Functions** (Node.js)
-- **Google Sheets API** for data storage
-- **OpenAI API** for AI summarization
-- **SendGrid API** for email notifications
+- **Netlify Functions** - 서버리스 백엔드
+- **Node.js** - JavaScript 런타임
+- **Express** - 웹 프레임워크
 
-### External APIs
-- **나라장터 공공조달 API** for bid data
-- **OpenAI GPT-4o-mini** for AI analysis
-- **Google Sheets** for user data storage
-- **SendGrid** for email notifications
+### API 연동
+- **조달청 OpenAPI** - 입찰공고 데이터
+- **OpenAI API** - AI 분석 기능
+- **Gmail API** - 이메일 발송
+- **Google Sheets API** - 데이터 저장
 
-## 📦 설치 및 실행
+### 배포
+- **Netlify** - 프론트엔드 및 서버리스 함수 배포
+- **GitHub** - 버전 관리 및 CI/CD
+
+## 🚀 시작하기
 
 ### 1. 저장소 클론
 ```bash
-git clone <repository-url>
-cd ai-nakchali
+git clone https://github.com/neod00/aibiddy.git
+cd aibiddy/ai-nakchali
 ```
 
 ### 2. 의존성 설치
@@ -45,27 +56,27 @@ npm install
 ```
 
 ### 3. 환경 변수 설정
-`.env` 파일을 생성하고 다음 변수들을 설정하세요:
+```bash
+cp env.example .env
+```
+
+`.env` 파일에 다음 API 키들을 설정하세요:
 
 ```env
-# 나라장터 API
-REACT_APP_NARA_API_KEY=your_nara_api_key
+# 나라장터 API 설정
+REACT_APP_NARA_API_KEY=your_nara_api_key_here
+REACT_APP_NARA_API_URL=https://apis.data.go.kr/1230000/ad/BidPublicInfoService
 
-# OpenAI API
-REACT_APP_OPENAI_API_KEY=your_openai_api_key
+# OpenAI API 설정
+REACT_APP_OPENAI_API_KEY=your_openai_api_key_here
 
-# 이메일 API (SendGrid)
-REACT_APP_EMAIL_API_KEY=your_sendgrid_api_key
+# Gmail 이메일 설정
+REACT_APP_GMAIL_USER=your-gmail@gmail.com
+REACT_APP_GMAIL_APP_PASSWORD=your-16-digit-app-password
 
-# Google Sheets API
-REACT_APP_GOOGLE_SHEETS_CLIENT_EMAIL=your_service_account_email
-REACT_APP_GOOGLE_SHEETS_PRIVATE_KEY=your_private_key
-
-# JWT Secret
-REACT_APP_JWT_SECRET=your_jwt_secret
-
-# Google Analytics (선택사항)
-REACT_APP_GA_TRACKING_ID=your_ga_tracking_id
+# Google Sheets API 설정
+REACT_APP_GOOGLE_SHEETS_API_KEY=your_google_sheets_api_key_here
+REACT_APP_GOOGLE_SHEETS_ID=your_google_sheets_id_here
 ```
 
 ### 4. 개발 서버 실행
@@ -73,33 +84,7 @@ REACT_APP_GA_TRACKING_ID=your_ga_tracking_id
 npm start
 ```
 
-### 5. 프로덕션 빌드
-```bash
-npm run build
-```
-
-### 6. 번들 분석
-```bash
-npm run analyze
-```
-
-## 🚀 배포
-
-### Netlify 배포
-1. Netlify 대시보드에서 새 사이트 생성
-2. GitHub 저장소 연결
-3. 환경 변수 설정
-4. 자동 배포 활성화
-
-### 환경 변수 설정 (Netlify)
-- `REACT_APP_NARA_API_KEY`
-- `REACT_APP_OPENAI_API_KEY`
-- `REACT_APP_EMAIL_API_KEY`
-- `REACT_APP_GOOGLE_SHEETS_CLIENT_EMAIL`
-- `REACT_APP_GOOGLE_SHEETS_PRIVATE_KEY`
-- `REACT_APP_JWT_SECRET`
-- `GOOGLE_SHEETS_ERROR_LOG_ID` (에러 로깅용)
-- `SLACK_WEBHOOK_URL` (선택사항)
+브라우저에서 `http://localhost:3000`으로 접속하세요.
 
 ## 📁 프로젝트 구조
 
@@ -108,93 +93,68 @@ ai-nakchali/
 ├── public/                 # 정적 파일
 ├── src/
 │   ├── components/         # React 컴포넌트
-│   ├── contexts/          # React Context
-│   ├── hooks/             # 커스텀 훅
-│   ├── pages/             # 페이지 컴포넌트
-│   ├── services/          # API 서비스
-│   ├── types/             # TypeScript 타입 정의
-│   ├── utils/             # 유틸리티 함수
-│   └── App.tsx            # 메인 앱 컴포넌트
+│   │   ├── SearchForm.tsx  # 검색 폼
+│   │   ├── BidList.tsx     # 입찰공고 목록
+│   │   └── ...
+│   ├── contexts/           # React Context
+│   ├── hooks/              # 커스텀 훅
+│   ├── pages/              # 페이지 컴포넌트
+│   ├── services/           # API 서비스
+│   │   ├── bidService.ts   # 조달청 API
+│   │   ├── authService.ts  # 인증 서비스
+│   │   └── ...
+│   ├── types/              # TypeScript 타입 정의
+│   └── utils/              # 유틸리티 함수
 ├── netlify/
-│   └── functions/         # Netlify Functions
-├── .github/
-│   └── workflows/         # GitHub Actions
-├── netlify.toml           # Netlify 설정
-├── craco.config.js        # CRACO 설정
-└── package.json
+│   └── functions/          # Netlify Functions
+├── package.json
+└── README.md
 ```
 
-## 🔧 주요 기능 상세
+## 🔧 API 설정
 
-### 1. 입찰공고 검색
-- 키워드, 종류, 금액 범위, 기관명, 지역별 검색
-- 페이지네이션 지원
-- 실시간 검색 결과 표시
+### 조달청 OpenAPI
+1. [공공데이터포털](https://data.go.kr)에서 회원가입
+2. "나라장터 입찰공고정보서비스" 신청
+3. 발급받은 API 키를 `.env` 파일에 설정
 
-### 2. AI 요약
-- GPT-4o-mini를 활용한 입찰공고 분석
-- 핵심 요구사항, 제출서류, 마감일, 예산 정보 추출
-- 무료 계정: 월 10회 제한
-- 프리미엄 계정: 무제한 사용
+### OpenAI API
+1. [OpenAI](https://platform.openai.com)에서 계정 생성
+2. API 키 발급
+3. `.env` 파일에 설정
 
-### 3. 조건부 알림
-- 사용자 정의 검색 조건 설정
-- 무료 계정: 최대 3개 조건
-- 프리미엄 계정: 최대 10개 조건
-- 이메일 알림 발송
+### Gmail API
+1. Gmail 계정에서 앱 비밀번호 생성
+2. `.env` 파일에 설정
 
-### 4. 계정 관리
-- JWT 기반 인증
-- 무료/프리미엄 계정 구분
-- Google Sheets를 통한 사용자 데이터 저장
+## 🚀 배포
 
-## 🎨 UI/UX 특징
+### Netlify 배포
+1. GitHub 저장소를 Netlify에 연결
+2. 빌드 설정:
+   - Build command: `npm run build`
+   - Publish directory: `build`
+3. 환경 변수 설정
+4. 배포 완료
 
-- **모바일 퍼스트**: 모바일 환경에 최적화된 반응형 디자인
-- **직관적 네비게이션**: 탭 기반 네비게이션
-- **위트 있는 UX**: 프리미엄 업그레이드 시 재미있는 사용자 경험
-- **접근성**: 키보드 네비게이션 및 스크린 리더 지원
+## 📊 주요 기능 상세
 
-## 🔒 보안
+### 검색 기능
+- **키워드 검색**: 입찰공고명에서 특정 키워드 검색
+- **기관별 검색**: 수요기관명으로 필터링
+- **지역별 검색**: 지역명으로 필터링
+- **금액 범위**: 최소/최대 금액 설정
+- **종류별**: 물품, 용역, 공사, 외자 구분
 
-- **CSP (Content Security Policy)** 설정
-- **XSS 보호** 헤더
-- **JWT 토큰** 기반 인증
-- **HTTPS** 강제 사용
-- **환경 변수**를 통한 민감 정보 관리
+### AI 분석
+- **자동 요약**: 입찰공고 내용을 AI가 요약
+- **조건 분석**: 사용자 맞춤 입찰 조건 추천
+- **알림 설정**: 관심 있는 입찰공고 자동 알림
 
-## 📊 모니터링 및 분석
-
-- **Google Analytics 4** 통합
-- **에러 리포팅** 시스템
-- **성능 모니터링**
-- **사용자 행동 추적**
-
-## 🚀 성능 최적화
-
-- **React.memo**를 통한 컴포넌트 최적화
-- **useCallback**을 통한 불필요한 리렌더링 방지
-- **API 응답 캐싱** 시스템
-- **가상화**를 통한 대용량 목록 최적화
-- **코드 스플리팅** 및 **지연 로딩**
-- **번들 크기 최적화**
-
-## 🧪 테스트
-
-```bash
-# 단위 테스트 실행
-npm test
-
-# 커버리지 리포트 생성
-npm test -- --coverage
-
-# E2E 테스트 (추후 구현 예정)
-npm run test:e2e
-```
-
-## 📝 라이선스
-
-이 프로젝트는 MIT 라이선스 하에 배포됩니다.
+### 데이터 관리
+- **캐시 시스템**: 5분 TTL로 성능 최적화
+- **페이지네이션**: 대용량 데이터 효율적 처리
+- **실시간 업데이트**: 최신 입찰공고 자동 갱신
 
 ## 🤝 기여하기
 
@@ -204,10 +164,14 @@ npm run test:e2e
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 📞 지원
+## 📄 라이선스
 
-문제가 발생하거나 질문이 있으시면 이슈를 생성해주세요.
+이 프로젝트는 MIT 라이선스 하에 배포됩니다. 자세한 내용은 `LICENSE` 파일을 참조하세요.
+
+## 📞 문의
+
+프로젝트에 대한 문의사항이 있으시면 이슈를 생성해 주세요.
 
 ---
 
-**AI낙찰이** - 공공조달의 새로운 패러다임을 제시합니다. 🎯
+**AI낙찰이**로 더 스마트한 입찰공고 분석을 시작하세요! 🎯

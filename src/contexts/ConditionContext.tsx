@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import { SearchCondition, ConditionContextType } from '../types/condition';
 import { useAuth } from './AuthContext';
-import conditionService from '../services/conditionService';
+import googleSheetsService from '../services/googleSheetsService';
 
 const ConditionContext = createContext<ConditionContextType | undefined>(undefined);
 
@@ -21,7 +21,7 @@ export const ConditionProvider: React.FC<ConditionProviderProps> = ({ children }
     try {
       setLoading(true);
       setError(null);
-      const userConditions = await conditionService.getConditions(user.id);
+      const userConditions = await googleSheetsService.getUserConditions(user.id);
       setConditions(userConditions);
     } catch (err) {
       console.error('조건 로드 오류:', err);
@@ -47,13 +47,6 @@ export const ConditionProvider: React.FC<ConditionProviderProps> = ({ children }
       setLoading(true);
       setError(null);
 
-      // 유효성 검사
-      const validation = conditionService.validateCondition(condition);
-      if (!validation.valid) {
-        setError(validation.message);
-        return false;
-      }
-
       // 계정 타입별 제한 확인
       const activeConditions = conditions.filter(c => c.isActive).length;
       const maxConditions = user.accountType === 'premium' ? 10 : 3;
@@ -63,7 +56,10 @@ export const ConditionProvider: React.FC<ConditionProviderProps> = ({ children }
         return false;
       }
 
-      const conditionId = await conditionService.addCondition(user.id, condition);
+      const conditionId = await googleSheetsService.addCondition({
+        ...condition,
+        userId: user.id,
+      });
 
       const newCondition: SearchCondition = {
         ...condition,
@@ -90,16 +86,7 @@ export const ConditionProvider: React.FC<ConditionProviderProps> = ({ children }
       setLoading(true);
       setError(null);
 
-      // 유효성 검사
-      if (updates.keyword || updates.minAmount !== undefined || updates.maxAmount !== undefined) {
-        const validation = conditionService.validateCondition(updates);
-        if (!validation.valid) {
-          setError(validation.message);
-          return false;
-        }
-      }
-
-      await conditionService.updateCondition(user.id, id, updates);
+      await googleSheetsService.updateCondition(id, updates);
 
       setConditions(prev =>
         prev.map(condition =>
@@ -123,7 +110,7 @@ export const ConditionProvider: React.FC<ConditionProviderProps> = ({ children }
       setLoading(true);
       setError(null);
 
-      await conditionService.deleteCondition(user.id, id);
+      await googleSheetsService.deleteCondition(id);
 
       setConditions(prev => prev.filter(condition => condition.id !== id));
       return true;
@@ -160,7 +147,7 @@ export const ConditionProvider: React.FC<ConditionProviderProps> = ({ children }
         }
       }
 
-      await conditionService.toggleCondition(user.id, id);
+      await googleSheetsService.updateCondition(id, { isActive: !condition.isActive });
 
       setConditions(prev =>
         prev.map(condition =>
@@ -194,10 +181,10 @@ export const ConditionProvider: React.FC<ConditionProviderProps> = ({ children }
   );
 };
 
-export const useConditions = (): ConditionContextType => {
+export const useCondition = (): ConditionContextType => {
   const context = useContext(ConditionContext);
   if (context === undefined) {
-    throw new Error('useConditions must be used within a ConditionProvider');
+    throw new Error('useCondition must be used within a ConditionProvider');
   }
   return context;
 };

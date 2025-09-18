@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import SettingsModal from './SettingsModal';
+import ConditionManagementModal from './ConditionManagementModal';
+import NotificationSettingsModal from './NotificationSettingsModal';
 import './UserMenu.css';
 
 const UserMenu: React.FC = () => {
   const { user, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
+  const [showConditionModal, setShowConditionModal] = useState(false);
+  const [showNotificationModal, setShowNotificationModal] = useState(false);
 
   if (!user) return null;
 
@@ -19,6 +25,21 @@ const UserMenu: React.FC = () => {
 
   const closeMenu = () => {
     setIsOpen(false);
+  };
+
+  const handleSettings = () => {
+    closeMenu();
+    setShowSettingsModal(true);
+  };
+
+  const handleConditionManagement = () => {
+    closeMenu();
+    setShowConditionModal(true);
+  };
+
+  const handleNotificationSettings = () => {
+    closeMenu();
+    setShowNotificationModal(true);
   };
 
   return (
@@ -50,15 +71,15 @@ const UserMenu: React.FC = () => {
             <div className="menu-divider" />
             
             <div className="menu-items">
-              <button className="menu-item" onClick={closeMenu}>
+              <button className="menu-item" onClick={handleSettings}>
                 <span className="menu-icon">⚙️</span>
                 설정
               </button>
-              <button className="menu-item" onClick={closeMenu}>
+              <button className="menu-item" onClick={handleConditionManagement}>
                 <span className="menu-icon">📊</span>
                 내 조건 관리
               </button>
-              <button className="menu-item" onClick={closeMenu}>
+              <button className="menu-item" onClick={handleNotificationSettings}>
                 <span className="menu-icon">📧</span>
                 알림 설정
               </button>
@@ -73,6 +94,20 @@ const UserMenu: React.FC = () => {
           </div>
         </>
       )}
+
+      {/* 모달들 */}
+      <SettingsModal 
+        isOpen={showSettingsModal} 
+        onClose={() => setShowSettingsModal(false)} 
+      />
+      <ConditionManagementModal 
+        isOpen={showConditionModal} 
+        onClose={() => setShowConditionModal(false)} 
+      />
+      <NotificationSettingsModal 
+        isOpen={showNotificationModal} 
+        onClose={() => setShowNotificationModal(false)} 
+      />
     </div>
   );
 };

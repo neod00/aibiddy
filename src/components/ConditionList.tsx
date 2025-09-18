@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { useConditions } from '../contexts/ConditionContext';
+import { useCondition } from '../contexts/ConditionContext';
 import { SearchCondition } from '../types/condition';
 import ConditionForm from './ConditionForm';
 import './ConditionList.css';
 
 const ConditionList: React.FC = () => {
-  const { conditions, deleteCondition, toggleCondition, loading, error } = useConditions();
+  const { conditions, deleteCondition, toggleCondition, loading, error } = useCondition();
   const [showForm, setShowForm] = useState(false);
   const [editingCondition, setEditingCondition] = useState<SearchCondition | null>(null);
 

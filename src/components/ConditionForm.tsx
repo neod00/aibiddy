@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useConditions } from '../contexts/ConditionContext';
+import { useCondition } from '../contexts/ConditionContext';
 import { ConditionFormData } from '../types/condition';
 import './ConditionForm.css';
 
@@ -9,7 +9,7 @@ interface ConditionFormProps {
 }
 
 const ConditionForm: React.FC<ConditionFormProps> = ({ onClose, editingCondition }) => {
-  const { addCondition, updateCondition, loading, error } = useConditions();
+  const { addCondition, updateCondition, loading, error } = useCondition();
   const [formData, setFormData] = useState<ConditionFormData>({
     keyword: editingCondition?.keyword || '',
     type: editingCondition?.type || '',

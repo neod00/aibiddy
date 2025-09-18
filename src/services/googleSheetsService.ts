@@ -1,4 +1,5 @@
-import { google } from 'googleapis';
+// Google Sheets API는 서버 사이드에서만 사용
+// import { google } from 'googleapis';
 import { User } from '../types/user';
 import { SearchCondition, GoogleSheetsCondition } from '../types/condition';
 
@@ -45,22 +46,9 @@ class GoogleSheetsService {
 
   private async initializeSheets() {
     try {
-      // 브라우저 환경에서는 Netlify Functions를 통해 처리
-      if (typeof window !== 'undefined') {
-        this.isInitialized = true;
-        console.log('브라우저 환경에서 Google Sheets API 사용 (Netlify Functions)');
-        return;
-      }
-
-      // 서버 환경에서만 직접 API 초기화
-      const auth = new google.auth.GoogleAuth({
-        keyFile: './ai-biddy-a2691667fb7b.json',
-        scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-      });
-
-      this.sheets = google.sheets({ version: 'v4', auth });
+      // 브라우저 환경에서는 항상 Netlify Functions 사용
       this.isInitialized = true;
-      console.log('Google Sheets API 초기화 완료');
+      console.log('브라우저 환경에서 Google Sheets API 사용 (Netlify Functions)');
     } catch (error) {
       console.error('Google Sheets API 초기화 실패:', error);
       this.isInitialized = false;
@@ -76,86 +64,16 @@ class GoogleSheetsService {
     }
   }
 
-  // 시트 존재 확인 및 생성
+  // 시트 존재 확인 및 생성 (서버 사이드에서만 사용)
   private async ensureSheetExists(sheetName: string) {
-    try {
-      await this.ensureInitialized();
-      
-      const response = await this.sheets.spreadsheets.get({
-        spreadsheetId: this.spreadsheetId,
-      });
-
-      const existingSheets = response.data.sheets || [];
-      const sheetExists = existingSheets.some((sheet: any) => 
-        sheet.properties.title === sheetName
-      );
-
-      if (!sheetExists) {
-        await this.sheets.spreadsheets.batchUpdate({
-          spreadsheetId: this.spreadsheetId,
-          requestBody: {
-            requests: [{
-              addSheet: {
-                properties: {
-                  title: sheetName,
-                },
-              },
-            }],
-          },
-        });
-
-        // 헤더 행 추가
-        await this.addHeaders(sheetName);
-      }
-    } catch (error) {
-      console.error(`시트 ${sheetName} 생성/확인 중 오류:`, error);
-      throw error;
-    }
+    // 브라우저에서는 Netlify Functions가 처리
+    console.log(`시트 ${sheetName} 확인은 Netlify Functions에서 처리됩니다.`);
   }
 
-  // 헤더 행 추가
+  // 헤더 행 추가 (서버 사이드에서만 사용)
   private async addHeaders(sheetName: string) {
-    try {
-      if (sheetName === 'Users') {
-        await this.sheets.spreadsheets.values.update({
-          spreadsheetId: this.spreadsheetId,
-          range: `${sheetName}!A1:H1`,
-          valueInputOption: 'RAW',
-          requestBody: {
-            values: [['ID', 'Email', 'Name', 'Phone', 'Company', 'CreatedAt', 'UpdatedAt', 'IsActive']],
-          },
-        });
-      } else if (sheetName === 'Conditions') {
-        await this.sheets.spreadsheets.values.update({
-          spreadsheetId: this.spreadsheetId,
-          range: `${sheetName}!A1:L1`,
-          valueInputOption: 'RAW',
-          requestBody: {
-            values: [['ID', 'UserId', 'Keyword', 'Type', 'MinAmount', 'MaxAmount', 'Agency', 'Region', 'NotificationInterval', 'IsActive', 'CreatedAt', 'LastTriggeredAt']],
-          },
-        });
-      } else if (sheetName === 'UserSettings') {
-        await this.sheets.spreadsheets.values.update({
-          spreadsheetId: this.spreadsheetId,
-          range: `${sheetName}!A1:I1`,
-          valueInputOption: 'RAW',
-          requestBody: {
-            values: [['ID', 'UserId', 'EmailNotifications', 'SmsNotifications', 'PushNotifications', 'NotificationFrequency', 'Language', 'Theme', 'CreatedAt', 'UpdatedAt']],
-          },
-        });
-      } else if (sheetName === 'NotificationSettings') {
-        await this.sheets.spreadsheets.values.update({
-          spreadsheetId: this.spreadsheetId,
-          range: `${sheetName}!A1:J1`,
-          valueInputOption: 'RAW',
-          requestBody: {
-            values: [['ID', 'UserId', 'Email', 'Sms', 'Push', 'Frequency', 'QuietHoursEnabled', 'QuietHoursStart', 'QuietHoursEnd', 'CreatedAt', 'UpdatedAt']],
-          },
-        });
-      }
-    } catch (error) {
-      console.error(`헤더 추가 중 오류 (${sheetName}):`, error);
-    }
+    // 브라우저에서는 Netlify Functions가 처리
+    console.log(`시트 ${sheetName} 헤더 추가는 Netlify Functions에서 처리됩니다.`);
   }
 
   // 사용자 데이터 저장
@@ -211,9 +129,11 @@ class GoogleSheetsService {
     }
   }
 
-  // 사용자 정보 업데이트 (임시로 로컬 스토리지 사용)
+  // 사용자 정보 업데이트
   async updateUser(userId: string, updates: Partial<User>): Promise<void> {
     try {
+      // TODO: Netlify Function 구현 필요
+      // 현재는 로컬 스토리지 사용
       const users = JSON.parse(localStorage.getItem('ai_nakchali_users') || '[]');
       const userIndex = users.findIndex((u: User) => u.id === userId);
       

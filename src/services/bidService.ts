@@ -104,11 +104,17 @@ class BidService {
       console.log('API 응답 상태:', response.status);
       console.log('API 응답 데이터:', response.data);
 
+      // API 응답을 BidResponse 형태로 변환
+      const bidResponse = this.parseApiResponse(response.data);
+      console.log('API 응답:', bidResponse);
+      console.log('추출된 입찰공고:', bidResponse.response.body.items);
+      console.log('총 개수:', bidResponse.response.body.totalCount);
+
       // 응답 데이터 캐시에 저장
-      this.setCachedData(cacheKey, response.data);
+      this.setCachedData(cacheKey, bidResponse);
       console.log('API에서 데이터 로드 및 캐시 저장:', cacheKey);
 
-      return response.data;
+      return bidResponse;
     } catch (error: any) {
       console.error('입찰공고 조회 중 오류 발생:', error);
       
@@ -256,9 +262,7 @@ class BidService {
           resultMsg: 'NORMAL_SERVICE'
         },
         body: {
-          items: {
-            item: filteredBids
-          },
+          items: filteredBids,
           numOfRows: params.numOfRows || 10,
           pageNo: params.pageNo || 1,
           totalCount: filteredBids.length
@@ -277,6 +281,48 @@ class BidService {
   clearCacheKey(key: string): void {
     cache.delete(key);
     console.log(`캐시 키가 삭제되었습니다: ${key}`);
+  }
+
+  // API 응답을 BidResponse 형태로 변환
+  private parseApiResponse(apiResponse: any): BidResponse {
+    try {
+      const response = apiResponse.response;
+      if (!response || !response.body) {
+        console.error('API 응답 구조가 올바르지 않습니다:', apiResponse);
+        return this.getMockBidData({});
+      }
+
+      const body = response.body;
+      let items: any[] = [];
+
+      // items가 객체인 경우 배열로 변환
+      if (body.items) {
+        if (Array.isArray(body.items)) {
+          items = body.items;
+        } else if (typeof body.items === 'object') {
+          // 객체인 경우 값들을 배열로 변환
+          items = Object.values(body.items);
+        }
+      }
+
+      return {
+        response: {
+          header: {
+            resultCode: response.header?.resultCode || '00',
+            resultMsg: response.header?.resultMsg || 'NORMAL_SERVICE'
+          },
+          body: {
+            items: items,
+            numOfRows: body.numOfRows || 10,
+            pageNo: body.pageNo || 1,
+            totalCount: body.totalCount || 0
+          }
+        }
+      };
+    } catch (error) {
+      console.error('API 응답 파싱 중 오류 발생:', error);
+      return this.getMockBidData({});
+    }
   }
 }
 

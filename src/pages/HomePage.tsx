@@ -67,12 +67,12 @@ const HomePage: React.FC = () => {
       
       if (result && result.response && result.response.body) {
         const body = result.response.body;
-        bids = body.items && body.items.item ? body.items.item : [];
+        bids = body.items || [];
         totalCount = body.totalCount || 0;
       } else if (result && (result as any).body) {
         // 다른 응답 구조일 경우
         const body = (result as any).body;
-        bids = body.items && body.items.item ? body.items.item : [];
+        bids = body.items || [];
         totalCount = body.totalCount || 0;
       } else if (Array.isArray(result)) {
         // 배열로 직접 반환되는 경우

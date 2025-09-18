@@ -31,9 +31,7 @@ export interface BidResponse {
       resultMsg: string;
     };
     body: {
-      items: {
-        item: BidItem[];
-      };
+      items: BidItem[];
       numOfRows: number;
       pageNo: number;
       totalCount: number;

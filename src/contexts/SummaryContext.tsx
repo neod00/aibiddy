@@ -15,15 +15,6 @@ export const SummaryProvider: React.FC<SummaryProviderProps> = ({ children }) =>
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // 사용자 변경 시 사용량 정보 로드
-  useEffect(() => {
-    if (user) {
-      loadUsageInfo();
-    } else {
-      setUsageInfo(null);
-    }
-  }, [user, loadUsageInfo]);
-
   const loadUsageInfo = useCallback(async () => {
     if (!user) return;
 
@@ -34,6 +25,15 @@ export const SummaryProvider: React.FC<SummaryProviderProps> = ({ children }) =>
       console.error('사용량 정보 로드 오류:', err);
     }
   }, [user]);
+
+  // 사용자 변경 시 사용량 정보 로드
+  useEffect(() => {
+    if (user) {
+      loadUsageInfo();
+    } else {
+      setUsageInfo(null);
+    }
+  }, [user, loadUsageInfo]);
 
   const getSummary = async (bidId: string, bidTitle: string, bidContent: string): Promise<SummaryResponse> => {
     if (!user) {

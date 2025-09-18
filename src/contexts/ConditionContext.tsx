@@ -15,15 +15,6 @@ export const ConditionProvider: React.FC<ConditionProviderProps> = ({ children }
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // 사용자 변경 시 조건 목록 로드
-  useEffect(() => {
-    if (user) {
-      loadConditions();
-    } else {
-      setConditions([]);
-    }
-  }, [user, loadConditions]);
-
   const loadConditions = useCallback(async () => {
     if (!user) return;
 
@@ -39,6 +30,15 @@ export const ConditionProvider: React.FC<ConditionProviderProps> = ({ children }
       setLoading(false);
     }
   }, [user]);
+
+  // 사용자 변경 시 조건 목록 로드
+  useEffect(() => {
+    if (user) {
+      loadConditions();
+    } else {
+      setConditions([]);
+    }
+  }, [user, loadConditions]);
 
   const addCondition = async (condition: Omit<SearchCondition, 'id' | 'userId' | 'createdAt'>): Promise<boolean> => {
     if (!user) return false;

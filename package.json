@@ -2,6 +2,7 @@
   "name": "ai-nakchali",
   "version": "0.1.0",
   "private": true,
+  "homepage": ".",
   "proxy": "https://apis.data.go.kr",
   "dependencies": {
     "@sendgrid/mail": "^8.1.5",

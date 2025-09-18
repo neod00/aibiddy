@@ -48,7 +48,8 @@
   },
   "scripts": {
     "start": "craco start",
-    "build": "craco build",
+    "build": "NODE_OPTIONS=--max_old_space_size=4096 craco build",
+    "build:netlify": "NODE_OPTIONS=--max_old_space_size=4096 --max_semi_space_size=128 craco build",
     "test": "craco test",
     "eject": "react-scripts eject",
     "analyze": "npm run build && npx webpack-bundle-analyzer build/static/js/*.js"

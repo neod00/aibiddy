@@ -5,6 +5,8 @@
 [build.environment]
   NODE_VERSION = "18"
   NPM_FLAGS = "--production=false"
+  CI = "false"
+  DISABLE_ESLINT_PLUGIN = "true"
 
 [[redirects]]
   from = "/*"

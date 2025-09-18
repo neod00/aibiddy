@@ -10,7 +10,7 @@ import './HomePage.css';
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  // const { user } = useAuth();
   const [bids, setBids] = useState<BidItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -105,7 +105,7 @@ const HomePage: React.FC = () => {
   // 초기 로드 시 기본 검색
   useEffect(() => {
     fetchBids(searchParams, 1);
-  }, []);
+  }, [searchParams]);
 
   // 관리자 모드 확인 및 데이터 로드
   useEffect(() => {

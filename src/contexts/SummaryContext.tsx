@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import { SummaryContextType, SummaryResponse, UsageInfo } from '../types/summary';
 import { useAuth } from './AuthContext';
 import summaryService from '../services/summaryService';
@@ -22,9 +22,9 @@ export const SummaryProvider: React.FC<SummaryProviderProps> = ({ children }) =>
     } else {
       setUsageInfo(null);
     }
-  }, [user]);
+  }, [user, loadUsageInfo]);
 
-  const loadUsageInfo = async () => {
+  const loadUsageInfo = useCallback(async () => {
     if (!user) return;
 
     try {
@@ -33,7 +33,7 @@ export const SummaryProvider: React.FC<SummaryProviderProps> = ({ children }) =>
     } catch (err) {
       console.error('사용량 정보 로드 오류:', err);
     }
-  };
+  }, [user]);
 
   const getSummary = async (bidId: string, bidTitle: string, bidContent: string): Promise<SummaryResponse> => {
     if (!user) {

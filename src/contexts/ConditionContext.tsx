@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import { SearchCondition, ConditionContextType } from '../types/condition';
 import { useAuth } from './AuthContext';
 import conditionService from '../services/conditionService';
@@ -22,9 +22,9 @@ export const ConditionProvider: React.FC<ConditionProviderProps> = ({ children }
     } else {
       setConditions([]);
     }
-  }, [user]);
+  }, [user, loadConditions]);
 
-  const loadConditions = async () => {
+  const loadConditions = useCallback(async () => {
     if (!user) return;
 
     try {
@@ -38,7 +38,7 @@ export const ConditionProvider: React.FC<ConditionProviderProps> = ({ children }
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
 
   const addCondition = async (condition: Omit<SearchCondition, 'id' | 'userId' | 'createdAt'>): Promise<boolean> => {
     if (!user) return false;

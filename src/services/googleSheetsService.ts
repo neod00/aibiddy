@@ -1,6 +1,6 @@
 // 임시로 Google Sheets 서비스를 비활성화하여 UI 테스트용으로 사용
 // import { google } from 'googleapis';
-import { User, GoogleSheetsUser } from '../types/user';
+import { User } from '../types/user';
 
 class GoogleSheetsService {
   private sheets: any;

@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSummary } from '../contexts/SummaryContext';
 import { BidItem } from '../types/bid';
-import bidService from '../services/bidService';
+// import bidService from '../services/bidService';
 import './BidDetailPage.css';
 
 const BidDetailPage: React.FC = () => {
   const { bidId } = useParams<{ bidId: string }>();
   const navigate = useNavigate();
-  const { getSummary, usageInfo, loading } = useSummary();
+  const { getSummary, usageInfo } = useSummary();
   
   const [bid, setBid] = useState<BidItem | null>(null);
   const [loadingBid, setLoadingBid] = useState(true);

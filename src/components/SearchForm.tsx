@@ -33,7 +33,7 @@ const SearchForm: React.FC<SearchFormProps> = memo(({ onSearch, loading }) => {
   }, []);
 
   // 빠른 선택 옵션 핸들러
-  const handleDateRangeChange = useCallback((range: string) => {
+  const handleDateRangeChange = useCallback((range: 'today' | '1week' | '1month' | '3months' | '6months' | '1year') => {
     const today = new Date();
     let startDate: Date;
     

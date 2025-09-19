@@ -3,13 +3,23 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .app-header {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   padding: 20px 0;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-md);
+  transition: box-shadow 0.3s ease;
+}
+
+/* 다크모드에서의 헤더 */
+[data-theme="dark"] .app-header {
+  background: linear-gradient(135deg, #4c1d95 0%, #581c87 100%);
+  box-shadow: var(--shadow-lg);
 }
 
 .container {
@@ -63,16 +73,18 @@
 
 .app-main {
   flex: 1;
-  background: #f8fafc;
+  background: var(--bg-secondary);
   padding: 20px 0;
+  transition: background-color 0.3s ease;
 }
 
 .app-footer {
-  background: #374151;
-  color: #9ca3af;
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
   padding: 20px 0;
   text-align: center;
-  border-top: 1px solid #4b5563;
+  border-top: 1px solid var(--border-color);
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
 .app-footer p {

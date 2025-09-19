@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import AuthModal from './AuthModal';
 import UserMenu from './UserMenu';
+import ThemeToggle from './ThemeToggle';
 import './AppLayout.css';
 
 interface AppLayoutProps {
@@ -22,6 +23,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
               <p>나라장터 입찰공고를 쉽고 빠르게 찾아보세요</p>
             </div>
             <div className="header-right">
+              <ThemeToggle />
               {user ? (
                 <UserMenu />
               ) : (

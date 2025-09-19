@@ -1,9 +1,11 @@
 /* 입찰공고 목록 스타일 */
 .bid-list-container {
-  background: #fff;
+  background: var(--bg-primary);
   border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-md);
   overflow: hidden;
+  border: 1px solid var(--border-color);
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .bid-list-header {
@@ -288,4 +290,122 @@
   .info-value {
     font-size: 13px;
   }
+}
+
+/* 다크모드 스타일 */
+[data-theme="dark"] .bid-list-container {
+  background: var(--bg-primary);
+  border-color: var(--border-color);
+  box-shadow: var(--shadow-lg);
+}
+
+[data-theme="dark"] .bid-list-header {
+  background: var(--bg-tertiary);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .bid-list-header h2 {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .bid-count {
+  background: var(--accent-primary);
+  color: white;
+}
+
+[data-theme="dark"] .bid-item {
+  background: var(--bg-primary);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .bid-item:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--accent-primary);
+  box-shadow: var(--shadow-md);
+}
+
+[data-theme="dark"] .bid-title {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .bid-info {
+  background: var(--bg-secondary);
+  border-color: var(--border-light);
+}
+
+[data-theme="dark"] .info-label {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .info-value {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .info-value.amount {
+  color: var(--accent-primary);
+  font-weight: 600;
+}
+
+[data-theme="dark"] .info-value.deadline {
+  color: var(--warning);
+  font-weight: 600;
+}
+
+[data-theme="dark"] .sort-buttons {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .sort-btn {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .sort-btn:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--accent-primary);
+}
+
+[data-theme="dark"] .sort-btn.active {
+  background: var(--accent-primary);
+  color: white;
+  border-color: var(--accent-primary);
+}
+
+[data-theme="dark"] .pagination {
+  background: var(--bg-tertiary);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .pagination-btn {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .pagination-btn:hover:not(:disabled) {
+  background: var(--bg-tertiary);
+  border-color: var(--accent-primary);
+}
+
+[data-theme="dark"] .pagination-btn.active {
+  background: var(--accent-primary);
+  color: white;
+  border-color: var(--accent-primary);
+}
+
+[data-theme="dark"] .pagination-btn:disabled {
+  background: var(--bg-secondary);
+  color: var(--text-muted);
+  border-color: var(--border-light);
+}
+
+[data-theme="dark"] .empty-state {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .loading-spinner {
+  border-color: var(--border-color);
+  border-top-color: var(--accent-primary);
 }

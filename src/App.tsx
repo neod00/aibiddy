@@ -5,6 +5,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import { ConditionProvider } from './contexts/ConditionContext';
 import { SummaryProvider } from './contexts/SummaryContext';
 import { BidProvider } from './contexts/BidContext';
+import { ThemeProvider } from './contexts/ThemeContext';
 import ErrorBoundary from './components/ErrorBoundary';
 import { initGA } from './utils/analytics';
 import HomePage from './pages/HomePage';
@@ -34,15 +35,17 @@ function AppContent() {
 function App() {
   return (
     <ErrorBoundary>
-      <AuthProvider>
-        <ConditionProvider>
-          <SummaryProvider>
-            <BidProvider>
-              <AppContent />
-            </BidProvider>
-          </SummaryProvider>
-        </ConditionProvider>
-      </AuthProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <ConditionProvider>
+            <SummaryProvider>
+              <BidProvider>
+                <AppContent />
+              </BidProvider>
+            </SummaryProvider>
+          </ConditionProvider>
+        </AuthProvider>
+      </ThemeProvider>
     </ErrorBoundary>
   );
 }

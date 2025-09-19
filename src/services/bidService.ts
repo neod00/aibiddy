@@ -175,6 +175,14 @@ class BidService {
         console.log('추출된 입찰공고 (전체):', combinedResponse.response.body.items);
         console.log('총 개수 (전체):', combinedResponse.response.body.totalCount);
 
+        // API 응답이 성공적이지만 데이터가 비어있는 경우 목업 데이터 반환
+        if (combinedResponse.response.body.items.length === 0) {
+          console.log('전체 API 응답이 비어있어 목업 데이터를 반환합니다.');
+          const mockData = this.getMockBidData(params);
+          this.setCachedData(cacheKey, mockData);
+          return mockData;
+        }
+
         // 응답 데이터 캐시에 저장
         this.setCachedData(cacheKey, combinedResponse);
         console.log('API에서 데이터 로드 및 캐시 저장 (전체):', cacheKey);
@@ -199,6 +207,14 @@ class BidService {
         console.log('API 응답:', bidResponse);
         console.log('추출된 입찰공고:', bidResponse.response.body.items);
         console.log('총 개수:', bidResponse.response.body.totalCount);
+
+        // API 응답이 성공적이지만 데이터가 비어있는 경우 목업 데이터 반환
+        if (bidResponse.response.body.items.length === 0) {
+          console.log('API 응답이 비어있어 목업 데이터를 반환합니다.');
+          const mockData = this.getMockBidData(params);
+          this.setCachedData(cacheKey, mockData);
+          return mockData;
+        }
 
         // 응답 데이터 캐시에 저장
         this.setCachedData(cacheKey, bidResponse);

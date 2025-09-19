@@ -1,54 +1,181 @@
 .settings-modal {
-  max-width: 600px;
-  max-height: 80vh;
+  max-width: 700px;
+  max-height: 85vh;
   overflow-y: auto;
 }
 
 .settings-form {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 28px;
 }
 
 .setting-group {
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 20px;
-  background: #f9f9f9;
+  border: 1px solid #e1e5e9;
+  border-radius: 12px;
+  padding: 24px;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: all 0.2s ease;
+}
+
+.setting-group:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .setting-group h3 {
-  margin: 0 0 16px 0;
-  color: #333;
-  font-size: 16px;
-  font-weight: 600;
-}
-
-.setting-item {
+  margin: 0 0 8px 0;
+  color: #2d3748;
+  font-size: 18px;
+  font-weight: 700;
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 12px;
-  cursor: pointer;
+  gap: 8px;
+}
+
+.setting-description {
+  margin: 0 0 20px 0;
+  color: #718096;
   font-size: 14px;
+  line-height: 1.5;
 }
 
-.setting-item:last-child {
-  margin-bottom: 0;
+/* 알림 설정 스타일 */
+.notification-options {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
-.setting-item input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
+.notification-item {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.notification-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  background: #f8fafc;
+  transition: all 0.2s ease;
+}
+
+.notification-item:hover .notification-content {
+  border-color: #3182ce;
+  background: #ebf8ff;
+}
+
+.notification-item input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: #3182ce;
+  margin-top: 2px;
+}
+
+.notification-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.notification-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.notification-desc {
+  font-size: 14px;
+  color: #718096;
+  line-height: 1.4;
+}
+
+/* 선택된 알림 항목 스타일 */
+.notification-item input[type="checkbox"]:checked + .notification-content {
+  border-color: #3182ce;
+  background: #ebf8ff;
+}
+
+/* 드롭다운 스타일 */
+.select-wrapper {
+  position: relative;
+}
+
+.setting-select {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  background: #ffffff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.setting-select:focus {
+  outline: none;
+  border-color: #3182ce;
+  box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+}
+
+/* 테마 선택 스타일 */
+.theme-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.theme-option {
   cursor: pointer;
 }
 
-.setting-item select {
-  padding: 8px 12px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
-  min-width: 120px;
+.theme-option input[type="radio"] {
+  display: none;
+}
+
+.theme-preview {
+  padding: 20px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  text-align: center;
+  transition: all 0.2s ease;
+  background: #ffffff;
+}
+
+.theme-option:hover .theme-preview {
+  border-color: #3182ce;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.theme-option input[type="radio"]:checked + .theme-preview {
+  border-color: #3182ce;
+  background: #ebf8ff;
+}
+
+.light-theme {
+  background: linear-gradient(135deg, #ffffff 0%, #f7fafc 100%);
+}
+
+.dark-theme {
+  background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+  color: #ffffff;
+}
+
+.theme-name {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.theme-desc {
+  font-size: 12px;
+  opacity: 0.8;
 }
 
 .message {
@@ -80,4 +207,42 @@
   text-align: center;
   padding: 40px;
   color: #dc3545;
+}
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+  .settings-modal {
+    max-width: 95vw;
+    margin: 20px auto;
+  }
+  
+  .setting-group {
+    padding: 16px;
+  }
+  
+  .notification-content {
+    padding: 12px;
+    gap: 12px;
+  }
+  
+  .theme-options {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .theme-preview {
+    padding: 16px;
+  }
+  
+  .setting-group h3 {
+    font-size: 16px;
+  }
+  
+  .notification-title {
+    font-size: 14px;
+  }
+  
+  .notification-desc {
+    font-size: 13px;
+  }
 }

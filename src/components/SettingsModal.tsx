@@ -102,65 +102,117 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose }) => {
           ) : settings ? (
             <div className="settings-form">
               <div className="setting-group">
-                <h3>알림 설정</h3>
-                <label className="setting-item">
-                  <input
-                    type="checkbox"
-                    checked={settings.emailNotifications}
-                    onChange={(e) => handleChange('emailNotifications', e.target.checked)}
-                  />
-                  이메일 알림
-                </label>
-                <label className="setting-item">
-                  <input
-                    type="checkbox"
-                    checked={settings.smsNotifications}
-                    onChange={(e) => handleChange('smsNotifications', e.target.checked)}
-                  />
-                  SMS 알림
-                </label>
-                <label className="setting-item">
-                  <input
-                    type="checkbox"
-                    checked={settings.pushNotifications}
-                    onChange={(e) => handleChange('pushNotifications', e.target.checked)}
-                  />
-                  푸시 알림
-                </label>
+                <h3>📧 알림 설정</h3>
+                <p className="setting-description">새로운 입찰공고가 등록되면 알림을 받을 방법을 선택하세요.</p>
+                
+                <div className="notification-options">
+                  <label className="notification-item">
+                    <div className="notification-content">
+                      <input
+                        type="checkbox"
+                        checked={settings.emailNotifications}
+                        onChange={(e) => handleChange('emailNotifications', e.target.checked)}
+                      />
+                      <div className="notification-info">
+                        <span className="notification-title">이메일 알림</span>
+                        <span className="notification-desc">등록된 이메일로 알림을 받습니다</span>
+                      </div>
+                    </div>
+                  </label>
+                  
+                  <label className="notification-item">
+                    <div className="notification-content">
+                      <input
+                        type="checkbox"
+                        checked={settings.smsNotifications}
+                        onChange={(e) => handleChange('smsNotifications', e.target.checked)}
+                      />
+                      <div className="notification-info">
+                        <span className="notification-title">SMS 알림</span>
+                        <span className="notification-desc">휴대폰 번호로 문자 메시지를 받습니다</span>
+                      </div>
+                    </div>
+                  </label>
+                  
+                  <label className="notification-item">
+                    <div className="notification-content">
+                      <input
+                        type="checkbox"
+                        checked={settings.pushNotifications}
+                        onChange={(e) => handleChange('pushNotifications', e.target.checked)}
+                      />
+                      <div className="notification-info">
+                        <span className="notification-title">푸시 알림</span>
+                        <span className="notification-desc">브라우저에서 즉시 알림을 받습니다</span>
+                      </div>
+                    </div>
+                  </label>
+                </div>
               </div>
 
               <div className="setting-group">
-                <h3>알림 빈도</h3>
-                <select
-                  value={settings.notificationFrequency}
-                  onChange={(e) => handleChange('notificationFrequency', e.target.value)}
-                >
-                  <option value="immediate">즉시</option>
-                  <option value="daily">일일</option>
-                  <option value="weekly">주간</option>
-                </select>
+                <h3>⏰ 알림 빈도</h3>
+                <p className="setting-description">알림을 받을 주기를 설정하세요.</p>
+                <div className="select-wrapper">
+                  <select
+                    value={settings.notificationFrequency}
+                    onChange={(e) => handleChange('notificationFrequency', e.target.value)}
+                    className="setting-select"
+                  >
+                    <option value="immediate">즉시 - 새로운 공고가 등록되면 바로 알림</option>
+                    <option value="daily">일일 - 매일 정해진 시간에 알림</option>
+                    <option value="weekly">주간 - 매주 정해진 요일에 알림</option>
+                  </select>
+                </div>
               </div>
 
               <div className="setting-group">
-                <h3>언어 설정</h3>
-                <select
-                  value={settings.language}
-                  onChange={(e) => handleChange('language', e.target.value)}
-                >
-                  <option value="ko">한국어</option>
-                  <option value="en">English</option>
-                </select>
+                <h3>🌐 언어 설정</h3>
+                <p className="setting-description">사용할 언어를 선택하세요.</p>
+                <div className="select-wrapper">
+                  <select
+                    value={settings.language}
+                    onChange={(e) => handleChange('language', e.target.value)}
+                    className="setting-select"
+                  >
+                    <option value="ko">한국어</option>
+                    <option value="en">English</option>
+                  </select>
+                </div>
               </div>
 
               <div className="setting-group">
-                <h3>테마 설정</h3>
-                <select
-                  value={settings.theme}
-                  onChange={(e) => handleChange('theme', e.target.value)}
-                >
-                  <option value="light">라이트</option>
-                  <option value="dark">다크</option>
-                </select>
+                <h3>🎨 테마 설정</h3>
+                <p className="setting-description">화면의 색상 테마를 선택하세요.</p>
+                <div className="theme-options">
+                  <label className="theme-option">
+                    <input
+                      type="radio"
+                      name="theme"
+                      value="light"
+                      checked={settings.theme === 'light'}
+                      onChange={(e) => handleChange('theme', e.target.value)}
+                    />
+                    <div className="theme-preview light-theme">
+                      <div className="theme-name">라이트</div>
+                      <div className="theme-desc">밝고 깔끔한 화면</div>
+                    </div>
+                  </label>
+                  
+                  <label className="theme-option">
+                    <input
+                      type="radio"
+                      name="theme"
+                      value="dark"
+                      checked={settings.theme === 'dark'}
+                      onChange={(e) => handleChange('theme', e.target.value)}
+                    />
+                    <div className="theme-preview dark-theme">
+                      <div className="theme-name">다크</div>
+                      <div className="theme-desc">눈에 편한 어두운 화면</div>
+                    </div>
+                  </label>
+                </div>
               </div>
 
               {message && (

@@ -17,6 +17,35 @@
   line-height: 1.5;
 }
 
+.condition-actions-header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 24px;
+  padding: 0 24px;
+}
+
+.add-condition-btn {
+  background: #3182ce;
+  color: white;
+  border: 2px solid #3182ce;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.add-condition-btn:hover {
+  background: #2c5aa0;
+  border-color: #2c5aa0;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(49, 130, 206, 0.3);
+}
+
 .conditions-list {
   min-height: 400px;
 }
@@ -111,6 +140,27 @@
   display: flex;
   gap: 8px;
   margin-left: 16px;
+}
+
+.edit-button {
+  width: 36px;
+  height: 36px;
+  background: #38a169;
+  color: white;
+  border: 2px solid #38a169;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.edit-button:hover {
+  background: #2f855a;
+  border-color: #2f855a;
+  transform: scale(1.05);
 }
 
 .toggle-button {
@@ -219,9 +269,24 @@
   color: #666;
 }
 
+.empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.6;
+}
+
+.empty-state h3 {
+  margin: 0 0 12px 0;
+  color: #4a5568;
+  font-size: 20px;
+  font-weight: 600;
+}
+
 .empty-state p {
-  margin: 8px 0;
+  margin: 8px 0 24px 0;
   font-size: 14px;
+  color: #718096;
+  line-height: 1.5;
 }
 
 .message {

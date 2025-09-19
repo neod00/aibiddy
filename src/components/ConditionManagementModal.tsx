@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useCondition } from '../contexts/ConditionContext';
+import { SearchCondition } from '../types/condition';
+import ConditionForm from './ConditionForm';
 import googleSheetsService from '../services/googleSheetsService';
 import './ConditionManagementModal.css';
 
@@ -14,6 +16,8 @@ const ConditionManagementModal: React.FC<ConditionManagementModalProps> = ({ isO
   const { conditions, addCondition, updateCondition, deleteCondition, toggleCondition } = useCondition();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
+  const [showForm, setShowForm] = useState(false);
+  const [editingCondition, setEditingCondition] = useState<SearchCondition | null>(null);
 
   useEffect(() => {
     if (isOpen && user) {
@@ -59,7 +63,31 @@ const ConditionManagementModal: React.FC<ConditionManagementModalProps> = ({ isO
     }
   };
 
+  const handleEdit = (condition: SearchCondition) => {
+    setEditingCondition(condition);
+    setShowForm(true);
+  };
+
+  const handleCloseForm = () => {
+    setShowForm(false);
+    setEditingCondition(null);
+  };
+
   if (!isOpen) return null;
+
+  // 조건 추가/편집 폼이 열려있을 때
+  if (showForm) {
+    return (
+      <div className="modal-overlay" onClick={handleCloseForm}>
+        <div className="modal-content condition-management-modal" onClick={(e) => e.stopPropagation()}>
+          <ConditionForm 
+            onClose={handleCloseForm}
+            editingCondition={editingCondition}
+          />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -74,14 +102,29 @@ const ConditionManagementModal: React.FC<ConditionManagementModalProps> = ({ isO
         </div>
         
         <div className="modal-body">
+          <div className="condition-actions-header">
+            <button 
+              className="btn btn-primary add-condition-btn"
+              onClick={() => setShowForm(true)}
+            >
+              + 새 조건 추가
+            </button>
+          </div>
           {loading ? (
             <div className="loading">조건을 불러오는 중...</div>
           ) : (
             <div className="conditions-list">
               {conditions.length === 0 ? (
                 <div className="empty-state">
-                  <p>저장된 조건이 없습니다.</p>
-                  <p>검색 페이지에서 조건을 추가해보세요.</p>
+                  <div className="empty-icon">🔔</div>
+                  <h3>등록된 조건이 없습니다</h3>
+                  <p>새 조건을 등록하여 입찰공고 알림을 받아보세요.</p>
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => setShowForm(true)}
+                  >
+                    첫 번째 조건 등록하기
+                  </button>
                 </div>
               ) : (
                 <div className="conditions-grid">
@@ -95,6 +138,13 @@ const ConditionManagementModal: React.FC<ConditionManagementModalProps> = ({ isO
                           </div>
                         </div>
                         <div className="condition-actions">
+                          <button
+                            className="edit-button"
+                            onClick={() => handleEdit(condition)}
+                            title="편집"
+                          >
+                            ✏️
+                          </button>
                           <button
                             className={`toggle-button ${condition.isActive ? 'active' : 'inactive'}`}
                             onClick={() => handleToggle(condition.id)}

@@ -4,9 +4,10 @@ import './AuthForm.css';
 
 interface RegisterFormProps {
   onSwitchToLogin: () => void;
+  onClose?: () => void;
 }
 
-const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToLogin }) => {
+const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToLogin, onClose }) => {
   const { register, loading, error } = useAuth();
   const [formData, setFormData] = useState({
     email: '',
@@ -69,6 +70,10 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToLogin }) => {
     if (success) {
       // 회원가입 성공 시 폼 초기화
       setFormData({ email: '', password: '', confirmPassword: '' });
+      // 모달 닫기
+      if (onClose) {
+        onClose();
+      }
     }
   };
 

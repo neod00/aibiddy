@@ -125,10 +125,14 @@ class AuthService {
         };
       }
 
-      // 로그인 시간 업데이트
-      await googleSheetsService.updateUser(user.id, {
-        lastLoginAt: new Date().toISOString(),
-      });
+      // 로그인 시간 업데이트 (오류 무시)
+      try {
+        await googleSheetsService.updateUser(user.id, {
+          lastLoginAt: new Date().toISOString(),
+        });
+      } catch (error) {
+        console.warn('로그인 시간 업데이트 실패 (무시됨):', error);
+      }
 
       // JWT 토큰 생성
       const token = this.generateToken(user);

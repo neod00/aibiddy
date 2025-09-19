@@ -35,9 +35,9 @@ const AuthModal: React.FC<AuthModalProps> = ({
         </button>
         
         {mode === 'login' ? (
-          <LoginForm onSwitchToRegister={handleSwitchMode} />
+          <LoginForm onSwitchToRegister={handleSwitchMode} onClose={handleClose} />
         ) : (
-          <RegisterForm onSwitchToLogin={handleSwitchMode} />
+          <RegisterForm onSwitchToLogin={handleSwitchMode} onClose={handleClose} />
         )}
       </div>
     </div>

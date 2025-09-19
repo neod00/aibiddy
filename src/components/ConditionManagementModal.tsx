@@ -69,6 +69,10 @@ const ConditionManagementModal: React.FC<ConditionManagementModalProps> = ({ isO
           <button className="close-button" onClick={onClose}>×</button>
         </div>
         
+        <div className="modal-description">
+          <p>저장된 검색 조건을 관리하고 알림 설정을 조정할 수 있습니다.</p>
+        </div>
+        
         <div className="modal-body">
           {loading ? (
             <div className="loading">조건을 불러오는 중...</div>
@@ -84,57 +88,78 @@ const ConditionManagementModal: React.FC<ConditionManagementModalProps> = ({ isO
                   {conditions.map((condition) => (
                     <div key={condition.id} className="condition-card">
                       <div className="condition-header">
-                        <h4>{condition.keyword}</h4>
+                        <div className="condition-title">
+                          <h4>{condition.keyword}</h4>
+                          <div className={`status-badge ${condition.isActive ? 'active' : 'inactive'}`}>
+                            {condition.isActive ? '활성' : '비활성'}
+                          </div>
+                        </div>
                         <div className="condition-actions">
                           <button
                             className={`toggle-button ${condition.isActive ? 'active' : 'inactive'}`}
                             onClick={() => handleToggle(condition.id)}
+                            title={condition.isActive ? '비활성화' : '활성화'}
                           >
-                            {condition.isActive ? '활성' : '비활성'}
+                            {condition.isActive ? '⏸️' : '▶️'}
                           </button>
                           <button
                             className="delete-button"
                             onClick={() => handleDelete(condition.id)}
+                            title="삭제"
                           >
-                            삭제
+                            🗑️
                           </button>
                         </div>
                       </div>
                       
                       <div className="condition-details">
-                        <div className="detail-item">
-                          <span className="label">유형:</span>
-                          <span className="value">{condition.type || '전체'}</span>
+                        <div className="detail-row">
+                          <div className="detail-item">
+                            <span className="detail-icon">🏷️</span>
+                            <span className="label">유형</span>
+                            <span className="value">{condition.type || '전체'}</span>
+                          </div>
+                          <div className="detail-item">
+                            <span className="detail-icon">💰</span>
+                            <span className="label">금액</span>
+                            <span className="value">
+                              {condition.minAmount ? `${condition.minAmount.toLocaleString()}원` : '0원'} ~ 
+                              {condition.maxAmount ? `${condition.maxAmount.toLocaleString()}원` : '제한없음'}
+                            </span>
+                          </div>
                         </div>
-                        <div className="detail-item">
-                          <span className="label">금액:</span>
-                          <span className="value">
-                            {condition.minAmount ? `${condition.minAmount.toLocaleString()}원` : '0원'} ~ 
-                            {condition.maxAmount ? `${condition.maxAmount.toLocaleString()}원` : '제한없음'}
-                          </span>
+                        
+                        <div className="detail-row">
+                          <div className="detail-item">
+                            <span className="detail-icon">🏢</span>
+                            <span className="label">기관</span>
+                            <span className="value">{condition.agency || '전체'}</span>
+                          </div>
+                          <div className="detail-item">
+                            <span className="detail-icon">📍</span>
+                            <span className="label">지역</span>
+                            <span className="value">{condition.region || '전체'}</span>
+                          </div>
                         </div>
-                        <div className="detail-item">
-                          <span className="label">기관:</span>
-                          <span className="value">{condition.agency || '전체'}</span>
-                        </div>
-                        <div className="detail-item">
-                          <span className="label">지역:</span>
-                          <span className="value">{condition.region || '전체'}</span>
-                        </div>
-                        <div className="detail-item">
-                          <span className="label">알림 주기:</span>
-                          <span className="value">
-                            {condition.notificationInterval === '1hour' ? '1시간마다' :
-                             condition.notificationInterval === '3hours' ? '3시간마다' :
-                             condition.notificationInterval === '6hours' ? '6시간마다' :
-                             condition.notificationInterval === 'daily' ? '일일' : '알 수 없음'}
-                          </span>
-                        </div>
-                        <div className="detail-item">
-                          <span className="label">생성일:</span>
-                          <span className="value">
-                            {new Date(condition.createdAt).toLocaleDateString('ko-KR')}
-                          </span>
+                        
+                        <div className="detail-row">
+                          <div className="detail-item">
+                            <span className="detail-icon">⏰</span>
+                            <span className="label">알림 주기</span>
+                            <span className="value">
+                              {condition.notificationInterval === '1hour' ? '1시간마다' :
+                               condition.notificationInterval === '3hours' ? '3시간마다' :
+                               condition.notificationInterval === '6hours' ? '6시간마다' :
+                               condition.notificationInterval === 'daily' ? '일일' : '알 수 없음'}
+                            </span>
+                          </div>
+                          <div className="detail-item">
+                            <span className="detail-icon">📅</span>
+                            <span className="label">생성일</span>
+                            <span className="value">
+                              {new Date(condition.createdAt).toLocaleDateString('ko-KR')}
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </div>

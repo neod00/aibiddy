@@ -88,6 +88,14 @@ class BidService {
       const endDate = params.endDate 
         ? new Date(params.endDate + 'T23:59:59')
         : today;
+
+      // 날짜 유효성 검증
+      if (startDate > endDate) {
+        console.warn('시작일이 종료일보다 늦습니다. 날짜를 교체합니다.');
+        const temp = startDate;
+        startDate = endDate;
+        endDate = temp;
+      }
       
       const searchParams = new URLSearchParams({
         ServiceKey: this.apiKey,
@@ -193,13 +201,17 @@ class BidService {
 
   // 목업 데이터 생성
   private getMockBidData(params: BidSearchParams): BidResponse {
+    // 사용자 설정 날짜에 맞는 목업 데이터 생성
+    const startDate = params.startDate ? new Date(params.startDate) : new Date('2024-12-01');
+    const endDate = params.endDate ? new Date(params.endDate) : new Date('2024-12-31');
+    
     const mockBids = [
       {
         bidNtceNo: '202412180001',
         bidNtceNm: 'AI 기반 입찰공고 분석 시스템 구축',
         dminsttNm: '한국공공기관',
-        bidNtceDt: '2024-12-18 09:00:00',
-        bidClseDt: '2024-12-25 18:00:00',
+        bidNtceDt: startDate.toISOString().slice(0, 19).replace('T', ' '),
+        bidClseDt: new Date(startDate.getTime() + 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 19).replace('T', ' '),
         bidMethdNm: '물품',
         cntrctMthNm: '일괄계약',
         estmtPrce: '5000',

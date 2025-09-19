@@ -82,10 +82,10 @@ class BidService {
       };
 
       // 사용자 설정 날짜 또는 기본값 사용
-      const startDate = params.startDate 
+      let startDate = params.startDate 
         ? new Date(params.startDate + 'T00:00:00')
         : sixMonthsAgo;
-      const endDate = params.endDate 
+      let endDate = params.endDate 
         ? new Date(params.endDate + 'T23:59:59')
         : today;
 

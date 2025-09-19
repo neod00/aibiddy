@@ -474,3 +474,171 @@
     font-size: 16px;
   }
 }
+
+/* 다크모드 스타일 */
+[data-theme="dark"] .bid-detail-page {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .detail-header {
+  background: var(--bg-primary);
+  border-color: var(--border-color);
+  box-shadow: var(--shadow-md);
+}
+
+[data-theme="dark"] .back-button {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .back-button:hover {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .detail-header h1 {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .bid-info-card,
+[data-theme="dark"] .ai-summary-card,
+[data-theme="dark"] .action-card {
+  background: var(--bg-primary);
+  border-color: var(--border-color);
+  box-shadow: var(--shadow-md);
+}
+
+[data-theme="dark"] .bid-info-card h2,
+[data-theme="dark"] .ai-summary-card h2,
+[data-theme="dark"] .action-card h2 {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .info-section {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .info-section h3 {
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .info-item {
+  background: var(--bg-primary);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .info-item:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--accent-primary);
+}
+
+[data-theme="dark"] .info-item .label {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .info-item .value {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .file-link {
+  color: var(--accent-primary);
+}
+
+[data-theme="dark"] .file-link:hover {
+  color: var(--accent-hover);
+}
+
+[data-theme="dark"] .summary-content {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .summary-content h3 {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .summary-content p {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .summary-content ul {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .summary-content li {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .summary-actions {
+  background: var(--bg-tertiary);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .summary-btn {
+  background: var(--accent-primary);
+  color: white;
+}
+
+[data-theme="dark"] .summary-btn:hover {
+  background: var(--accent-hover);
+}
+
+[data-theme="dark"] .summary-btn:disabled {
+  background: var(--bg-secondary);
+  color: var(--text-muted);
+  border-color: var(--border-light);
+}
+
+[data-theme="dark"] .usage-info {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .usage-stats {
+  background: var(--bg-primary);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .usage-label {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .usage-value {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .usage-value.warning {
+  background: var(--error);
+  color: white;
+}
+
+[data-theme="dark"] .usage-value.premium {
+  background: var(--success);
+  color: white;
+}
+
+[data-theme="dark"] .upgrade-prompt {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .loading-spinner {
+  border-color: var(--border-color);
+  border-top-color: var(--accent-primary);
+}
+
+[data-theme="dark"] .error-message {
+  background: var(--bg-secondary);
+  border-color: var(--error);
+  color: var(--error);
+}
+
+[data-theme="dark"] .external-link {
+  color: var(--accent-primary);
+}
+
+[data-theme="dark"] .external-link:hover {
+  color: var(--accent-hover);
+}

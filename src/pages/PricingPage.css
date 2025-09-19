@@ -370,3 +370,126 @@
     font-size: 28px;
   }
 }
+
+/* 다크모드 스타일 */
+[data-theme="dark"] .pricing-page {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+}
+
+[data-theme="dark"] .pricing-header h1 {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .pricing-header p {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .pricing-card {
+  background: var(--bg-primary);
+  border-color: var(--border-color);
+  box-shadow: var(--shadow-lg);
+}
+
+[data-theme="dark"] .pricing-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
+}
+
+[data-theme="dark"] .pricing-card.featured {
+  background: var(--bg-primary);
+  border-color: var(--accent-primary);
+  box-shadow: var(--shadow-lg);
+}
+
+[data-theme="dark"] .pricing-card.featured::before {
+  background: var(--accent-primary);
+}
+
+[data-theme="dark"] .pricing-card h3 {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .pricing-card .price {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .pricing-card .price .currency {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .pricing-card .price .period {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .pricing-card .description {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .pricing-card .features {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .feature-item {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .feature-item .feature-text {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .pricing-card .cta-button {
+  background: var(--accent-primary);
+  color: white;
+}
+
+[data-theme="dark"] .pricing-card .cta-button:hover {
+  background: var(--accent-hover);
+}
+
+[data-theme="dark"] .pricing-card.featured .cta-button {
+  background: var(--accent-primary);
+  color: white;
+}
+
+[data-theme="dark"] .pricing-card.featured .cta-button:hover {
+  background: var(--accent-hover);
+}
+
+[data-theme="dark"] .features-section {
+  background: var(--bg-secondary);
+}
+
+[data-theme="dark"] .features-section h2 {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .features-section p {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .features-grid {
+  background: var(--bg-primary);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .feature-item {
+  background: var(--bg-primary);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .feature-item:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--accent-primary);
+}
+
+[data-theme="dark"] .feature-icon {
+  color: var(--accent-primary);
+}
+
+[data-theme="dark"] .feature-title {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .feature-description {
+  color: var(--text-secondary);
+}

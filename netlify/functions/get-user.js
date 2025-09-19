@@ -60,7 +60,7 @@ exports.handler = async (event, context) => {
     // 사용자 조회
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId,
-      range: 'Users!A:H',
+      range: 'Users!A:I',
     });
 
     const rows = response.data.values || [];
@@ -78,12 +78,13 @@ exports.handler = async (event, context) => {
         const user = {
           id: row[0],
           email: row[1],
-          name: row[2] || '',
-          phone: row[3] || '',
-          company: row[4] || '',
-          createdAt: row[5] || '',
-          updatedAt: row[6] || '',
-          isActive: row[7] === 'TRUE',
+          passwordHash: row[2] || '',
+          name: row[3] || '',
+          phone: row[4] || '',
+          company: row[5] || '',
+          createdAt: row[6] || '',
+          updatedAt: row[7] || '',
+          isActive: row[8] === 'TRUE',
         };
 
         return {

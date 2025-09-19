@@ -76,10 +76,10 @@ exports.handler = async (event, context) => {
       // 헤더 행 추가
       await sheets.spreadsheets.values.update({
         spreadsheetId,
-        range: 'Users!A1:H1',
+        range: 'Users!A1:I1',
         valueInputOption: 'RAW',
         requestBody: {
-          values: [['ID', 'Email', 'Name', 'Phone', 'Company', 'CreatedAt', 'UpdatedAt', 'IsActive']],
+          values: [['ID', 'Email', 'PasswordHash', 'Name', 'Phone', 'Company', 'CreatedAt', 'UpdatedAt', 'IsActive']],
         },
       });
     }
@@ -92,6 +92,7 @@ exports.handler = async (event, context) => {
       [
         userId,
         userData.email,
+        userData.passwordHash || '',
         userData.name || '',
         userData.phone || '',
         userData.company || '',
@@ -103,7 +104,7 @@ exports.handler = async (event, context) => {
 
     await sheets.spreadsheets.values.append({
       spreadsheetId,
-      range: 'Users!A:H',
+      range: 'Users!A:I',
       valueInputOption: 'RAW',
       requestBody: { values },
     });

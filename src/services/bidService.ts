@@ -111,7 +111,7 @@ class BidService {
       });
 
       // 종류별로 다른 API 엔드포인트 사용
-      const getEndpointByType = (type?: string) => {
+      const getEndpointByType = (type: string) => {
         switch (type) {
           case '물품':
             return 'getBidPblancListInfoThngPPSSrch';
@@ -126,29 +126,86 @@ class BidService {
         }
       };
 
-      const endpoint = getEndpointByType(params.type);
-      const apiUrl = `${this.baseURL}/${endpoint}?${searchParams.toString()}`;
-      console.log('API 호출 URL:', apiUrl);
-      console.log('검색 파라미터:', Object.fromEntries(searchParams));
-      console.log('선택된 종류:', params.type || '전체 (물품)');
+      // 전체 선택 시 모든 종류의 API를 호출하고 결과를 합침
+      if (!params.type || params.type === '전체') {
+        const allTypes = ['물품', '용역', '공사', '외자'];
+        const allResponses: BidResponse[] = [];
+        let totalCount = 0;
+        let allItems: any[] = [];
 
-      const response = await axios.get(apiUrl);
+        console.log('전체 선택: 모든 종류의 API를 호출합니다.');
 
-      // 응답 데이터 로그
-      console.log('API 응답 상태:', response.status);
-      console.log('API 응답 데이터:', response.data);
+        for (const type of allTypes) {
+          const endpoint = getEndpointByType(type);
+          const apiUrl = `${this.baseURL}/${endpoint}?${searchParams.toString()}`;
+          
+          console.log(`API 호출 URL (${type}):`, apiUrl);
+          
+          try {
+            const response = await axios.get(apiUrl);
+            console.log(`API 응답 상태 (${type}):`, response.status);
+            
+            const bidResponse = this.parseApiResponse(response.data);
+            console.log(`추출된 입찰공고 (${type}):`, bidResponse.response.body.items);
+            console.log(`총 개수 (${type}):`, bidResponse.response.body.totalCount);
+            
+            allResponses.push(bidResponse);
+            totalCount += bidResponse.response.body.totalCount;
+            allItems = allItems.concat(bidResponse.response.body.items);
+          } catch (error) {
+            console.error(`${type} API 호출 실패:`, error);
+            // 개별 API 실패 시에도 계속 진행
+          }
+        }
 
-      // API 응답을 BidResponse 형태로 변환
-      const bidResponse = this.parseApiResponse(response.data);
-      console.log('API 응답:', bidResponse);
-      console.log('추출된 입찰공고:', bidResponse.response.body.items);
-      console.log('총 개수:', bidResponse.response.body.totalCount);
+        // 모든 결과를 합쳐서 하나의 응답으로 만들기
+        const combinedResponse: BidResponse = {
+          response: {
+            header: allResponses[0]?.response.header || { resultCode: '00', resultMsg: 'NORMAL_SERVICE' },
+            body: {
+              items: allItems,
+              numOfRows: params.numOfRows || 10,
+              pageNo: params.pageNo || 1,
+              totalCount: totalCount
+            }
+          }
+        };
 
-      // 응답 데이터 캐시에 저장
-      this.setCachedData(cacheKey, bidResponse);
-      console.log('API에서 데이터 로드 및 캐시 저장:', cacheKey);
+        console.log('전체 API 응답:', combinedResponse);
+        console.log('추출된 입찰공고 (전체):', combinedResponse.response.body.items);
+        console.log('총 개수 (전체):', combinedResponse.response.body.totalCount);
 
-      return bidResponse;
+        // 응답 데이터 캐시에 저장
+        this.setCachedData(cacheKey, combinedResponse);
+        console.log('API에서 데이터 로드 및 캐시 저장 (전체):', cacheKey);
+        
+        return combinedResponse;
+      } else {
+        // 특정 종류 선택 시 해당 API만 호출
+        const endpoint = getEndpointByType(params.type);
+        const apiUrl = `${this.baseURL}/${endpoint}?${searchParams.toString()}`;
+        console.log('API 호출 URL:', apiUrl);
+        console.log('검색 파라미터:', Object.fromEntries(searchParams));
+        console.log('선택된 종류:', params.type);
+
+        const response = await axios.get(apiUrl);
+
+        // 응답 데이터 로그
+        console.log('API 응답 상태:', response.status);
+        console.log('API 응답 데이터:', response.data);
+
+        // API 응답을 BidResponse 형태로 변환
+        const bidResponse = this.parseApiResponse(response.data);
+        console.log('API 응답:', bidResponse);
+        console.log('추출된 입찰공고:', bidResponse.response.body.items);
+        console.log('총 개수:', bidResponse.response.body.totalCount);
+
+        // 응답 데이터 캐시에 저장
+        this.setCachedData(cacheKey, bidResponse);
+        console.log('API에서 데이터 로드 및 캐시 저장:', cacheKey);
+        
+        return bidResponse;
+      }
     } catch (error: any) {
       console.error('입찰공고 조회 중 오류 발생:', error);
       

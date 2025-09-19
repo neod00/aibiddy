@@ -64,6 +64,6 @@ export interface SearchFormData {
   region: string;
   startDate: string; // 시작일 (YYYY-MM-DD 형식)
   endDate: string;   // 종료일 (YYYY-MM-DD 형식)
-  dateRange: string; // 빠른 선택 옵션
+  dateRange: 'today' | '1week' | '1month' | '3months' | '6months' | '1year'; // 빠른 선택 옵션
   dateCriteria: 'input' | 'opening'; // 날짜 기준: 입력일, 개찰일
 }

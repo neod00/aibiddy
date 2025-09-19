@@ -41,6 +41,9 @@ const SearchForm: React.FC<SearchFormProps> = memo(({ onSearch, loading }) => {
       case 'today':
         startDate = today;
         break;
+      case '1week':
+        startDate = new Date(today.getTime() - (7 * 24 * 60 * 60 * 1000));
+        break;
       case '1month':
         startDate = new Date(today.getTime() - (30 * 24 * 60 * 60 * 1000));
         break;
@@ -170,6 +173,13 @@ const SearchForm: React.FC<SearchFormProps> = memo(({ onSearch, loading }) => {
                 onClick={() => handleDateRangeChange('today')}
               >
                 당일
+              </button>
+              <button
+                type="button"
+                className={`date-range-btn ${formData.dateRange === '1week' ? 'active' : ''}`}
+                onClick={() => handleDateRangeChange('1week')}
+              >
+                1주일
               </button>
               <button
                 type="button"

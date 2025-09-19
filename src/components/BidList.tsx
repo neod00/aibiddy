@@ -175,6 +175,28 @@ const BidList: React.FC<BidListProps> = memo(({ bids, loading, onBidClick }) => 
                 <span className="info-label">마감:</span>
                 <span className="info-value deadline">{formatDate(bid.bidClseDt)}</span>
               </div>
+              
+              {/* 1단계: 추가된 기본 정보 */}
+              {bid.opengDt && (
+                <div className="bid-info-item">
+                  <span className="info-label">개찰:</span>
+                  <span className="info-value">{formatDate(bid.opengDt)}</span>
+                </div>
+              )}
+              
+              {bid.cntrctCnclsMthdNm && (
+                <div className="bid-info-item">
+                  <span className="info-label">계약:</span>
+                  <span className="info-value">{bid.cntrctCnclsMthdNm}</span>
+                </div>
+              )}
+              
+              {bid.ntceInsttNm && (
+                <div className="bid-info-item">
+                  <span className="info-label">공고기관:</span>
+                  <span className="info-value">{bid.ntceInsttNm}</span>
+                </div>
+              )}
             </div>
             
             <div className="bid-actions">

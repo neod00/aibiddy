@@ -25,6 +25,19 @@ export interface BidItem {
   estmtPrce: string; // 추정가격
   rgnNm: string; // 지역명
   bidNtceDtlUrl: string; // 입찰공고상세URL
+  
+  // 1단계: 기본 정보 확장
+  bidBeginDt?: string; // 입찰개시일시
+  opengDt?: string; // 개찰일시
+  cntrctCnclsMthdNm?: string; // 계약체결방법명
+  ntceInsttNm?: string; // 공고기관명
+  
+  // 2단계: 고급 정보 (나중에 추가)
+  bidPrtcptFee?: string; // 입찰참가수수료
+  bidPrtcptFeePaymntYn?: string; // 입찰참가수수료납부여부
+  intrbidYn?: string; // 국제입찰대상여부
+  reNtceYn?: string; // 재공고여부
+  rgstTyNm?: string; // 등록유형명
 }
 
 export interface BidResponse {

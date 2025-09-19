@@ -269,11 +269,16 @@ class BidService {
         dminsttNm: '한국공공기관',
         bidNtceDt: startDate.toISOString().slice(0, 19).replace('T', ' '),
         bidClseDt: new Date(startDate.getTime() + 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 19).replace('T', ' '),
-        bidMethdNm: '물품',
+        bidMethdNm: '전자입찰',
         cntrctMthNm: '일괄계약',
         estmtPrce: '5000',
         rgnNm: '서울특별시',
-        bidNtceDtlUrl: 'https://example.com/bid/202412180001'
+        bidNtceDtlUrl: 'https://example.com/bid/202412180001',
+        // 1단계: 추가된 기본 정보
+        bidBeginDt: new Date(startDate.getTime() + 1 * 24 * 60 * 60 * 1000).toISOString().slice(0, 19).replace('T', ' '),
+        opengDt: new Date(startDate.getTime() + 8 * 24 * 60 * 60 * 1000).toISOString().slice(0, 19).replace('T', ' '),
+        cntrctCnclsMthdNm: '일반경쟁계약',
+        ntceInsttNm: '조달청'
       },
       {
         bidNtceNo: '202412180002',
@@ -285,7 +290,12 @@ class BidService {
         cntrctMthNm: '일괄계약',
         estmtPrce: '3000',
         rgnNm: '서울특별시',
-        bidNtceDtlUrl: 'https://example.com/bid/202412180002'
+        bidNtceDtlUrl: 'https://example.com/bid/202412180002',
+        // 1단계: 추가된 기본 정보
+        bidBeginDt: '2024-12-19 09:00:00',
+        opengDt: '2024-12-27 14:00:00',
+        cntrctCnclsMthdNm: '일반경쟁계약',
+        ntceInsttNm: '서울시청'
       },
       {
         bidNtceNo: '202412180003',
@@ -297,7 +307,12 @@ class BidService {
         cntrctMthNm: '일괄계약',
         estmtPrce: '15000',
         rgnNm: '경기도',
-        bidNtceDtlUrl: 'https://example.com/bid/202412180003'
+        bidNtceDtlUrl: 'https://example.com/bid/202412180003',
+        // 1단계: 추가된 기본 정보
+        bidBeginDt: '2024-12-19 10:00:00',
+        opengDt: '2024-12-28 15:00:00',
+        cntrctCnclsMthdNm: '일반경쟁계약',
+        ntceInsttNm: '한국전력공사'
       },
       {
         bidNtceNo: '202412180004',
@@ -309,7 +324,12 @@ class BidService {
         cntrctMthNm: '일괄계약',
         estmtPrce: '8000',
         rgnNm: '세종특별자치시',
-        bidNtceDtlUrl: 'https://example.com/bid/202412180004'
+        bidNtceDtlUrl: 'https://example.com/bid/202412180004',
+        // 1단계: 추가된 기본 정보
+        bidBeginDt: '2024-12-19 11:00:00',
+        opengDt: '2024-12-29 14:00:00',
+        cntrctCnclsMthdNm: '일반경쟁계약',
+        ntceInsttNm: '과학기술정보통신부'
       },
       {
         bidNtceNo: '202412180005',
@@ -321,7 +341,12 @@ class BidService {
         cntrctMthNm: '일괄계약',
         estmtPrce: '2500',
         rgnNm: '세종특별자치시',
-        bidNtceDtlUrl: 'https://example.com/bid/202412180005'
+        bidNtceDtlUrl: 'https://example.com/bid/202412180005',
+        // 1단계: 추가된 기본 정보
+        bidBeginDt: '2024-12-19 12:00:00',
+        opengDt: '2024-12-30 13:00:00',
+        cntrctCnclsMthdNm: '일반경쟁계약',
+        ntceInsttNm: '보건복지부'
       }
     ];
 

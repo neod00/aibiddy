@@ -129,27 +129,37 @@ const SearchForm: React.FC<SearchFormProps> = memo(({ onSearch, loading }) => {
             <label>기간</label>
             
             {/* 날짜 기준 선택 */}
-            <div className="date-criteria-options">
-              <label className="radio-option">
-                <input
-                  type="radio"
-                  name="dateCriteria"
-                  value="input"
-                  checked={formData.dateCriteria === 'input'}
-                  onChange={handleInputChange}
-                />
-                <span>입력일</span>
-              </label>
-              <label className="radio-option">
-                <input
-                  type="radio"
-                  name="dateCriteria"
-                  value="opening"
-                  checked={formData.dateCriteria === 'opening'}
-                  onChange={handleInputChange}
-                />
-                <span>개찰일</span>
-              </label>
+            <div className="date-criteria-section">
+              <div className="date-criteria-label">
+                <label>검색 기준</label>
+                <span className="date-criteria-description">
+                  조달청 API에서 지원하는 2가지 검색 기준
+                </span>
+              </div>
+              <div className="date-criteria-options">
+                <label className="radio-option">
+                  <input
+                    type="radio"
+                    name="dateCriteria"
+                    value="input"
+                    checked={formData.dateCriteria === 'input'}
+                    onChange={handleInputChange}
+                  />
+                  <span>공고게시일시</span>
+                  <small>입찰공고가 게시된 날짜</small>
+                </label>
+                <label className="radio-option">
+                  <input
+                    type="radio"
+                    name="dateCriteria"
+                    value="opening"
+                    checked={formData.dateCriteria === 'opening'}
+                    onChange={handleInputChange}
+                  />
+                  <span>개찰일시</span>
+                  <small>입찰이 개찰되는 날짜</small>
+                </label>
+              </div>
             </div>
 
             {/* 빠른 선택 버튼 */}

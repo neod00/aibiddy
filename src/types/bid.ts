@@ -2,7 +2,7 @@
 
 export interface BidSearchParams {
   keyword?: string;
-  type?: '물품' | '용역' | '공사' | '외자';
+  type?: '전체' | '물품' | '용역' | '공사' | '외자';
   minAmount?: number;
   maxAmount?: number;
   agency?: string;

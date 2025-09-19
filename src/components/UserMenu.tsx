@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import SettingsModal from './SettingsModal';
 import ConditionManagementModal from './ConditionManagementModal';
-import NotificationSettingsModal from './NotificationSettingsModal';
 import './UserMenu.css';
 
 const UserMenu: React.FC = () => {
@@ -10,7 +9,6 @@ const UserMenu: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [showConditionModal, setShowConditionModal] = useState(false);
-  const [showNotificationModal, setShowNotificationModal] = useState(false);
 
   if (!user) return null;
 
@@ -37,10 +35,6 @@ const UserMenu: React.FC = () => {
     setShowConditionModal(true);
   };
 
-  const handleNotificationSettings = () => {
-    closeMenu();
-    setShowNotificationModal(true);
-  };
 
   return (
     <div className="user-menu">
@@ -72,16 +66,12 @@ const UserMenu: React.FC = () => {
             
             <div className="menu-items">
               <button className="menu-item" onClick={handleSettings}>
-                <span className="menu-icon">⚙️</span>
-                설정
+                <span className="menu-icon">📧</span>
+                알림 설정
               </button>
               <button className="menu-item" onClick={handleConditionManagement}>
                 <span className="menu-icon">📊</span>
                 내 조건 관리
-              </button>
-              <button className="menu-item" onClick={handleNotificationSettings}>
-                <span className="menu-icon">📧</span>
-                알림 설정
               </button>
             </div>
             
@@ -103,10 +93,6 @@ const UserMenu: React.FC = () => {
       <ConditionManagementModal 
         isOpen={showConditionModal} 
         onClose={() => setShowConditionModal(false)} 
-      />
-      <NotificationSettingsModal 
-        isOpen={showNotificationModal} 
-        onClose={() => setShowNotificationModal(false)} 
       />
     </div>
   );

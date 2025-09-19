@@ -102,7 +102,7 @@ class BidService {
         pageNo: String(params.pageNo || 1),
         numOfRows: String(params.numOfRows || 10),
         type: 'json',
-        inqryDiv: '2', // 1: 공고게시일시, 2: 개찰일시
+        inqryDiv: params.dateCriteria === 'input' ? '1' : '2', // 1: 공고게시일시, 2: 개찰일시
         inqryBgnDt: formatDate(startDate), // 사용자 설정 시작일
         inqryEndDt: formatDate(endDate), // 사용자 설정 종료일
         ...(params.keyword && { bidNtceNm: params.keyword }),

@@ -27,7 +27,8 @@ const HomePage: React.FC = () => {
       region: '',
       startDate: today,
       endDate: today,
-      dateRange: '1week',
+      dateRange: 'today',
+      dateCriteria: 'opening',
     };
   });
 
@@ -63,6 +64,7 @@ const HomePage: React.FC = () => {
         region: params.region || undefined,
         startDate: params.startDate || undefined,
         endDate: params.endDate || undefined,
+        dateCriteria: params.dateCriteria || 'opening',
         pageNo: page,
         numOfRows: 10,
       };

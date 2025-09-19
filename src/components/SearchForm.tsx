@@ -20,7 +20,8 @@ const SearchForm: React.FC<SearchFormProps> = memo(({ onSearch, loading }) => {
     region: '',
     startDate: today, // 시작일은 오늘
     endDate: today,   // 종료일은 오늘
-    dateRange: '1week', // 기본값: 최근 1주일
+    dateRange: 'today', // 기본값: 당일
+    dateCriteria: 'opening', // 기본값: 개찰일
   });
 
   const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -37,8 +38,8 @@ const SearchForm: React.FC<SearchFormProps> = memo(({ onSearch, loading }) => {
     let startDate: Date;
     
     switch (range) {
-      case '1week':
-        startDate = new Date(today.getTime() - (7 * 24 * 60 * 60 * 1000));
+      case 'today':
+        startDate = today;
         break;
       case '1month':
         startDate = new Date(today.getTime() - (30 * 24 * 60 * 60 * 1000));
@@ -46,8 +47,11 @@ const SearchForm: React.FC<SearchFormProps> = memo(({ onSearch, loading }) => {
       case '3months':
         startDate = new Date(today.getTime() - (90 * 24 * 60 * 60 * 1000));
         break;
-      case 'all':
-        startDate = new Date(today.getTime() - (365 * 24 * 60 * 60 * 1000)); // 1년 전
+      case '6months':
+        startDate = new Date(today.getTime() - (180 * 24 * 60 * 60 * 1000));
+        break;
+      case '1year':
+        startDate = new Date(today.getTime() - (365 * 24 * 60 * 60 * 1000));
         break;
       default:
         startDate = today;
@@ -79,7 +83,8 @@ const SearchForm: React.FC<SearchFormProps> = memo(({ onSearch, loading }) => {
       region: '',
       startDate: today,
       endDate: today,
-      dateRange: '1week',
+      dateRange: 'today',
+      dateCriteria: 'opening',
     });
   }, []);
 
@@ -121,35 +126,68 @@ const SearchForm: React.FC<SearchFormProps> = memo(({ onSearch, loading }) => {
         {/* 날짜 선택 섹션 */}
         <div className="form-row">
           <div className="form-group">
-            <label>조회 기간</label>
+            <label>기간</label>
+            
+            {/* 날짜 기준 선택 */}
+            <div className="date-criteria-options">
+              <label className="radio-option">
+                <input
+                  type="radio"
+                  name="dateCriteria"
+                  value="input"
+                  checked={formData.dateCriteria === 'input'}
+                  onChange={handleInputChange}
+                />
+                <span>입력일</span>
+              </label>
+              <label className="radio-option">
+                <input
+                  type="radio"
+                  name="dateCriteria"
+                  value="opening"
+                  checked={formData.dateCriteria === 'opening'}
+                  onChange={handleInputChange}
+                />
+                <span>개찰일</span>
+              </label>
+            </div>
+
+            {/* 빠른 선택 버튼 */}
             <div className="date-range-buttons">
               <button
                 type="button"
-                className={`date-range-btn ${formData.dateRange === '1week' ? 'active' : ''}`}
-                onClick={() => handleDateRangeChange('1week')}
+                className={`date-range-btn ${formData.dateRange === 'today' ? 'active' : ''}`}
+                onClick={() => handleDateRangeChange('today')}
               >
-                최근 1주일
+                당일
               </button>
               <button
                 type="button"
                 className={`date-range-btn ${formData.dateRange === '1month' ? 'active' : ''}`}
                 onClick={() => handleDateRangeChange('1month')}
               >
-                최근 1개월
+                1개월
               </button>
               <button
                 type="button"
                 className={`date-range-btn ${formData.dateRange === '3months' ? 'active' : ''}`}
                 onClick={() => handleDateRangeChange('3months')}
               >
-                최근 3개월
+                3개월
               </button>
               <button
                 type="button"
-                className={`date-range-btn ${formData.dateRange === 'all' ? 'active' : ''}`}
-                onClick={() => handleDateRangeChange('all')}
+                className={`date-range-btn ${formData.dateRange === '6months' ? 'active' : ''}`}
+                onClick={() => handleDateRangeChange('6months')}
               >
-                전체
+                6개월
+              </button>
+              <button
+                type="button"
+                className={`date-range-btn ${formData.dateRange === '1year' ? 'active' : ''}`}
+                onClick={() => handleDateRangeChange('1year')}
+              >
+                1년
               </button>
             </div>
           </div>

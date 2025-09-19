@@ -25,6 +25,33 @@
   gap: 8px;
 }
 
+/* 날짜 기준 선택 스타일 */
+.date-criteria-options {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.radio-option input[type="radio"] {
+  margin: 0;
+  cursor: pointer;
+}
+
+.radio-option input[type="radio"]:checked + span {
+  color: #3b82f6;
+  font-weight: 600;
+}
+
 /* 날짜 선택 버튼 스타일 */
 .date-range-buttons {
   display: flex;

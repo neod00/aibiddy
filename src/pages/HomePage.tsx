@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useBid } from '../contexts/BidContext';
 import SearchForm from '../components/SearchForm';
 import BidList from '../components/BidList';
 import Pagination from '../components/Pagination';
@@ -11,6 +12,7 @@ import './HomePage.css';
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
   // const { user } = useAuth();
+  const { setSelectedBid } = useBid();
   const [bids, setBids] = useState<BidItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -109,6 +111,7 @@ const HomePage: React.FC = () => {
   };
 
   const handleBidClick = (bid: BidItem) => {
+    setSelectedBid(bid);
     navigate(`/bid/${bid.bidNtceNo}`);
   };
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSummary } from '../contexts/SummaryContext';
+import { useBid } from '../contexts/BidContext';
 import { BidItem } from '../types/bid';
 // import bidService from '../services/bidService';
 import './BidDetailPage.css';
@@ -9,6 +10,7 @@ const BidDetailPage: React.FC = () => {
   const { bidId } = useParams<{ bidId: string }>();
   const navigate = useNavigate();
   const { getSummary, usageInfo } = useSummary();
+  const { selectedBid, setSelectedBid } = useBid();
   
   const [bid, setBid] = useState<BidItem | null>(null);
   const [loadingBid, setLoadingBid] = useState(true);
@@ -28,22 +30,25 @@ const BidDetailPage: React.FC = () => {
       setLoadingBid(true);
       setError(null);
 
-      // 실제 구현에서는 bidId로 상세 정보를 조회해야 함
-      // 현재는 샘플 데이터 사용
-      const sampleBid: BidItem = {
-        bidNtceNo: bidId,
-        bidNtceNm: '소프트웨어 개발 용역',
-        dminsttNm: '서울특별시청',
-        bidNtceDt: '2024-12-01 09:00:00',
-        bidClseDt: '2024-12-31 18:00:00',
-        bidMethdNm: '일반경쟁입찰',
-        cntrctMthNm: '단가계약',
-        estmtPrce: '50000000',
-        rgnNm: '서울',
-        bidNtceDtlUrl: 'https://www.g2b.go.kr/',
-      };
-
-      setBid(sampleBid);
+      // Context에서 선택된 입찰공고 데이터 사용
+      if (selectedBid && selectedBid.bidNtceNo === bidId) {
+        setBid(selectedBid);
+      } else {
+        // Context에 데이터가 없는 경우 샘플 데이터 사용 (fallback)
+        const sampleBid: BidItem = {
+          bidNtceNo: bidId,
+          bidNtceNm: '소프트웨어 개발 용역',
+          dminsttNm: '서울특별시청',
+          bidNtceDt: '2024-12-01 09:00:00',
+          bidClseDt: '2024-12-31 18:00:00',
+          bidMethdNm: '일반경쟁입찰',
+          cntrctMthNm: '단가계약',
+          estmtPrce: '50000000',
+          rgnNm: '서울',
+          bidNtceDtlUrl: 'https://www.g2b.go.kr/',
+        };
+        setBid(sampleBid);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : '입찰공고를 불러오는 데 실패했습니다.');
     } finally {

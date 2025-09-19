@@ -94,9 +94,27 @@ class BidService {
         ...(params.region && { rgnNm: params.region }),
       });
 
-      const apiUrl = `${this.baseURL}/getBidPblancListInfoThngPPSSrch?${searchParams.toString()}`;
+      // 종류별로 다른 API 엔드포인트 사용
+      const getEndpointByType = (type?: string) => {
+        switch (type) {
+          case '물품':
+            return 'getBidPblancListInfoThngPPSSrch';
+          case '용역':
+            return 'getBidPblancListInfoServcPPSSrch';
+          case '공사':
+            return 'getBidPblancListInfoCnstwkPPSSrch';
+          case '외자':
+            return 'getBidPblancListInfoFrgcptPPSSrch';
+          default:
+            return 'getBidPblancListInfoThngPPSSrch'; // 기본값은 물품
+        }
+      };
+
+      const endpoint = getEndpointByType(params.type);
+      const apiUrl = `${this.baseURL}/${endpoint}?${searchParams.toString()}`;
       console.log('API 호출 URL:', apiUrl);
       console.log('검색 파라미터:', Object.fromEntries(searchParams));
+      console.log('선택된 종류:', params.type || '전체 (물품)');
 
       const response = await axios.get(apiUrl);
 

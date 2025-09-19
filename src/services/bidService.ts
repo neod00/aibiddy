@@ -174,6 +174,7 @@ class BidService {
         console.log('전체 API 응답:', combinedResponse);
         console.log('추출된 입찰공고 (전체):', combinedResponse.response.body.items);
         console.log('총 개수 (전체):', combinedResponse.response.body.totalCount);
+        console.log('items.length:', combinedResponse.response.body.items.length);
 
         // API 응답이 성공적이지만 데이터가 비어있는 경우 목업 데이터 반환
         if (combinedResponse.response.body.items.length === 0) {

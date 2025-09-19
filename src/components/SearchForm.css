@@ -25,6 +25,42 @@
   gap: 8px;
 }
 
+/* 날짜 선택 버튼 스타일 */
+.date-range-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.date-range-btn {
+  padding: 8px 16px;
+  border: 2px solid #e5e7eb;
+  border-radius: 6px;
+  background: #fff;
+  color: #374151;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.date-range-btn:hover {
+  border-color: #3b82f6;
+  color: #3b82f6;
+}
+
+.date-range-btn.active {
+  background: #3b82f6;
+  border-color: #3b82f6;
+  color: white;
+}
+
+.date-range-btn.active:hover {
+  background: #2563eb;
+  border-color: #2563eb;
+}
+
 .form-group label {
   font-weight: 600;
   color: #374151;
@@ -115,5 +151,14 @@
   
   .btn {
     width: 100%;
+  }
+  
+  .date-range-buttons {
+    flex-direction: column;
+  }
+  
+  .date-range-btn {
+    width: 100%;
+    text-align: center;
   }
 }

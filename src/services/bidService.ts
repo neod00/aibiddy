@@ -70,7 +70,7 @@ class BidService {
 
     try {
       // 조달청 API에 맞는 파라미터 설정
-      // 조회 기간을 최근 6개월로 설정하여 충분한 데이터 확보
+      // 사용자가 설정한 날짜 범위 사용, 없으면 기본값 사용
       const today = new Date();
       const sixMonthsAgo = new Date(today.getTime() - (180 * 24 * 60 * 60 * 1000));
       
@@ -80,6 +80,14 @@ class BidService {
         const day = String(date.getDate()).padStart(2, '0');
         return `${year}${month}${day}0000`;
       };
+
+      // 사용자 설정 날짜 또는 기본값 사용
+      const startDate = params.startDate 
+        ? new Date(params.startDate + 'T00:00:00')
+        : sixMonthsAgo;
+      const endDate = params.endDate 
+        ? new Date(params.endDate + 'T23:59:59')
+        : today;
       
       const searchParams = new URLSearchParams({
         ServiceKey: this.apiKey,
@@ -87,8 +95,8 @@ class BidService {
         numOfRows: String(params.numOfRows || 10),
         type: 'json',
         inqryDiv: '1', // 1: 공고게시일시, 2: 개찰일시
-        inqryBgnDt: formatDate(sixMonthsAgo), // 6개월 전
-        inqryEndDt: formatDate(today), // 오늘
+        inqryBgnDt: formatDate(startDate), // 사용자 설정 시작일
+        inqryEndDt: formatDate(endDate), // 사용자 설정 종료일
         ...(params.keyword && { bidNtceNm: params.keyword }),
         ...(params.agency && { dminsttNm: params.agency }),
         ...(params.region && { rgnNm: params.region }),

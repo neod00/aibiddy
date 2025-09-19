@@ -9,6 +9,8 @@ export interface BidSearchParams {
   region?: string;
   pageNo?: number;
   numOfRows?: number;
+  startDate?: string; // 시작일 (YYYYMMDD 형식)
+  endDate?: string;   // 종료일 (YYYYMMDD 형식)
 }
 
 export interface BidItem {
@@ -46,4 +48,7 @@ export interface SearchFormData {
   maxAmount: string;
   agency: string;
   region: string;
+  startDate: string; // 시작일 (YYYY-MM-DD 형식)
+  endDate: string;   // 종료일 (YYYY-MM-DD 형식)
+  dateRange: string; // 빠른 선택 옵션
 }

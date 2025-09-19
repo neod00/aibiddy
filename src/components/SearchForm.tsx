@@ -8,6 +8,9 @@ interface SearchFormProps {
 }
 
 const SearchForm: React.FC<SearchFormProps> = memo(({ onSearch, loading }) => {
+  // 오늘 날짜를 기본값으로 설정
+  const today = new Date().toISOString().split('T')[0];
+  
   const [formData, setFormData] = useState<SearchFormData>({
     keyword: '',
     type: '',
@@ -15,6 +18,9 @@ const SearchForm: React.FC<SearchFormProps> = memo(({ onSearch, loading }) => {
     maxAmount: '',
     agency: '',
     region: '',
+    startDate: today, // 시작일은 오늘
+    endDate: today,   // 종료일은 오늘
+    dateRange: '1week', // 기본값: 최근 1주일
   });
 
   const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -25,12 +31,45 @@ const SearchForm: React.FC<SearchFormProps> = memo(({ onSearch, loading }) => {
     }));
   }, []);
 
+  // 빠른 선택 옵션 핸들러
+  const handleDateRangeChange = useCallback((range: string) => {
+    const today = new Date();
+    let startDate: Date;
+    
+    switch (range) {
+      case '1week':
+        startDate = new Date(today.getTime() - (7 * 24 * 60 * 60 * 1000));
+        break;
+      case '1month':
+        startDate = new Date(today.getTime() - (30 * 24 * 60 * 60 * 1000));
+        break;
+      case '3months':
+        startDate = new Date(today.getTime() - (90 * 24 * 60 * 60 * 1000));
+        break;
+      case 'all':
+        startDate = new Date(today.getTime() - (365 * 24 * 60 * 60 * 1000)); // 1년 전
+        break;
+      default:
+        startDate = today;
+    }
+    
+    const formatDate = (date: Date) => date.toISOString().split('T')[0];
+    
+    setFormData(prev => ({
+      ...prev,
+      dateRange: range,
+      startDate: formatDate(startDate),
+      endDate: formatDate(today),
+    }));
+  }, []);
+
   const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     onSearch(formData);
   }, [onSearch, formData]);
 
   const handleReset = useCallback(() => {
+    const today = new Date().toISOString().split('T')[0];
     setFormData({
       keyword: '',
       type: '',
@@ -38,6 +77,9 @@ const SearchForm: React.FC<SearchFormProps> = memo(({ onSearch, loading }) => {
       maxAmount: '',
       agency: '',
       region: '',
+      startDate: today,
+      endDate: today,
+      dateRange: '1week',
     });
   }, []);
 
@@ -73,6 +115,69 @@ const SearchForm: React.FC<SearchFormProps> = memo(({ onSearch, loading }) => {
               <option value="공사">공사</option>
               <option value="외자">외자</option>
             </select>
+          </div>
+        </div>
+
+        {/* 날짜 선택 섹션 */}
+        <div className="form-row">
+          <div className="form-group">
+            <label>조회 기간</label>
+            <div className="date-range-buttons">
+              <button
+                type="button"
+                className={`date-range-btn ${formData.dateRange === '1week' ? 'active' : ''}`}
+                onClick={() => handleDateRangeChange('1week')}
+              >
+                최근 1주일
+              </button>
+              <button
+                type="button"
+                className={`date-range-btn ${formData.dateRange === '1month' ? 'active' : ''}`}
+                onClick={() => handleDateRangeChange('1month')}
+              >
+                최근 1개월
+              </button>
+              <button
+                type="button"
+                className={`date-range-btn ${formData.dateRange === '3months' ? 'active' : ''}`}
+                onClick={() => handleDateRangeChange('3months')}
+              >
+                최근 3개월
+              </button>
+              <button
+                type="button"
+                className={`date-range-btn ${formData.dateRange === 'all' ? 'active' : ''}`}
+                onClick={() => handleDateRangeChange('all')}
+              >
+                전체
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div className="form-row">
+          <div className="form-group">
+            <label htmlFor="startDate">시작일</label>
+            <input
+              type="date"
+              id="startDate"
+              name="startDate"
+              value={formData.startDate}
+              onChange={handleInputChange}
+              className="form-input"
+            />
+          </div>
+          
+          <div className="form-group">
+            <label htmlFor="endDate">종료일</label>
+            <input
+              type="date"
+              id="endDate"
+              name="endDate"
+              value={formData.endDate}
+              onChange={handleInputChange}
+              className="form-input"
+            />
           </div>
         </div>
 

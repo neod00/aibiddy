@@ -16,13 +16,19 @@ const HomePage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [searchParams, setSearchParams] = useState<SearchFormData>({
-    keyword: '',
-    type: '',
-    minAmount: '',
-    maxAmount: '',
-    agency: '',
-    region: '',
+  const [searchParams, setSearchParams] = useState<SearchFormData>(() => {
+    const today = new Date().toISOString().split('T')[0];
+    return {
+      keyword: '',
+      type: '',
+      minAmount: '',
+      maxAmount: '',
+      agency: '',
+      region: '',
+      startDate: today,
+      endDate: today,
+      dateRange: '1week',
+    };
   });
 
   // 관리자 모드 상태
@@ -55,6 +61,8 @@ const HomePage: React.FC = () => {
         maxAmount: params.maxAmount ? parseInt(params.maxAmount) : undefined,
         agency: params.agency || undefined,
         region: params.region || undefined,
+        startDate: params.startDate || undefined,
+        endDate: params.endDate || undefined,
         pageNo: page,
         numOfRows: 10,
       };

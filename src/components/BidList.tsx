@@ -1,6 +1,9 @@
-import React, { memo, useCallback } from 'react';
+import React, { memo, useCallback, useState, useMemo } from 'react';
 import { BidItem } from '../types/bid';
 import './BidList.css';
+
+type SortOption = 'default' | 'title' | 'agency' | 'deadline' | 'amount';
+type SortOrder = 'asc' | 'desc';
 
 interface BidListProps {
   bids: BidItem[];
@@ -9,6 +12,9 @@ interface BidListProps {
 }
 
 const BidList: React.FC<BidListProps> = memo(({ bids, loading, onBidClick }) => {
+  const [sortOption, setSortOption] = useState<SortOption>('default');
+  const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
+
   const formatAmount = useCallback((amount: string) => {
     if (!amount) return '미정';
     const num = parseInt(amount);
@@ -27,6 +33,49 @@ const BidList: React.FC<BidListProps> = memo(({ bids, loading, onBidClick }) => 
       minute: '2-digit',
     });
   }, []);
+
+  // 정렬된 입찰공고 목록
+  const sortedBids = useMemo(() => {
+    if (sortOption === 'default') return bids;
+
+    const sorted = [...bids].sort((a, b) => {
+      let comparison = 0;
+
+      switch (sortOption) {
+        case 'title':
+          comparison = a.bidNtceNm.localeCompare(b.bidNtceNm);
+          break;
+        case 'agency':
+          comparison = a.dminsttNm.localeCompare(b.dminsttNm);
+          break;
+        case 'deadline':
+          const dateA = new Date(a.bidClseDt).getTime();
+          const dateB = new Date(b.bidClseDt).getTime();
+          comparison = dateA - dateB;
+          break;
+        case 'amount':
+          const amountA = parseInt(a.estmtPrce) || 0;
+          const amountB = parseInt(b.estmtPrce) || 0;
+          comparison = amountA - amountB;
+          break;
+        default:
+          return 0;
+      }
+
+      return sortOrder === 'asc' ? comparison : -comparison;
+    });
+
+    return sorted;
+  }, [bids, sortOption, sortOrder]);
+
+  const handleSortChange = useCallback((option: SortOption) => {
+    if (sortOption === option) {
+      setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortOption(option);
+      setSortOrder('asc');
+    }
+  }, [sortOption]);
 
   if (loading) {
     return (
@@ -57,9 +106,45 @@ const BidList: React.FC<BidListProps> = memo(({ bids, loading, onBidClick }) => 
         <h2>입찰공고 목록</h2>
         <span className="bid-count">{bids.length}건</span>
       </div>
+
+      {/* 정렬 옵션 */}
+      <div className="sort-options">
+        <div className="sort-buttons">
+          <button
+            className={`sort-btn ${sortOption === 'default' ? 'active' : ''}`}
+            onClick={() => handleSortChange('default')}
+          >
+            기본순
+          </button>
+          <button
+            className={`sort-btn ${sortOption === 'title' ? 'active' : ''}`}
+            onClick={() => handleSortChange('title')}
+          >
+            제목순 {sortOption === 'title' && (sortOrder === 'asc' ? '↑' : '↓')}
+          </button>
+          <button
+            className={`sort-btn ${sortOption === 'agency' ? 'active' : ''}`}
+            onClick={() => handleSortChange('agency')}
+          >
+            기관순 {sortOption === 'agency' && (sortOrder === 'asc' ? '↑' : '↓')}
+          </button>
+          <button
+            className={`sort-btn ${sortOption === 'deadline' ? 'active' : ''}`}
+            onClick={() => handleSortChange('deadline')}
+          >
+            마감일순 {sortOption === 'deadline' && (sortOrder === 'asc' ? '↑' : '↓')}
+          </button>
+          <button
+            className={`sort-btn ${sortOption === 'amount' ? 'active' : ''}`}
+            onClick={() => handleSortChange('amount')}
+          >
+            예산순 {sortOption === 'amount' && (sortOrder === 'asc' ? '↑' : '↓')}
+          </button>
+        </div>
+      </div>
       
       <div className="bid-list">
-        {bids.map((bid) => (
+        {sortedBids.map((bid) => (
           <div
             key={bid.bidNtceNo}
             className="bid-item"

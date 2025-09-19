@@ -221,7 +221,7 @@ const BidDetailPage: React.FC = () => {
               </div>
               <div className="info-item">
                 <span className="label">입찰개시일시</span>
-                <span className="value">{formatDate(bid.bidBeginDt)}</span>
+                <span className="value">{formatDate(bid.bidBeginDt || '')}</span>
               </div>
               <div className="info-item">
                 <span className="label">입찰마감일시</span>
@@ -229,7 +229,7 @@ const BidDetailPage: React.FC = () => {
               </div>
               <div className="info-item">
                 <span className="label">개찰일시</span>
-                <span className="value">{formatDate(bid.opengDt)}</span>
+                <span className="value">{formatDate(bid.opengDt || '')}</span>
               </div>
               <div className="info-item">
                 <span className="label">계약기간</span>

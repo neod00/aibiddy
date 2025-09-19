@@ -171,34 +171,126 @@ const BidDetailPage: React.FC = () => {
       <div className="detail-content">
         <div className="bid-info-card">
           <h2>📋 입찰공고 정보</h2>
-          <div className="info-grid">
-            <div className="info-item">
-              <span className="label">수요기관</span>
-              <span className="value">{bid.dminsttNm}</span>
+          
+          {/* 기본 정보 */}
+          <div className="info-section">
+            <h3>🏢 기본 정보</h3>
+            <div className="info-grid">
+              <div className="info-item">
+                <span className="label">수요기관</span>
+                <span className="value">{bid.dminsttNm}</span>
+              </div>
+              <div className="info-item">
+                <span className="label">공고기관</span>
+                <span className="value">{bid.ntceInsttNm || '미정'}</span>
+              </div>
+              <div className="info-item">
+                <span className="label">지역</span>
+                <span className="value">{bid.rgnNm || '미정'}</span>
+              </div>
+              <div className="info-item">
+                <span className="label">입찰방법</span>
+                <span className="value">{bid.bidMethdNm}</span>
+              </div>
+              <div className="info-item">
+                <span className="label">계약방법</span>
+                <span className="value">{bid.cntrctMthNm}</span>
+              </div>
+              <div className="info-item">
+                <span className="label">계약체결방법</span>
+                <span className="value">{bid.cntrctCnclsMthdNm || '미정'}</span>
+              </div>
+              <div className="info-item">
+                <span className="label">추정가격</span>
+                <span className="value">{formatAmount(bid.estmtPrce)}</span>
+              </div>
+              <div className="info-item">
+                <span className="label">입찰공고차수</span>
+                <span className="value">{bid.bidNtceOrd || '1차'}</span>
+              </div>
             </div>
-            <div className="info-item">
-              <span className="label">지역</span>
-              <span className="value">{bid.rgnNm}</span>
+          </div>
+
+          {/* 일정 정보 */}
+          <div className="info-section">
+            <h3>📅 일정 정보</h3>
+            <div className="info-grid">
+              <div className="info-item">
+                <span className="label">입찰공고일시</span>
+                <span className="value">{formatDate(bid.bidNtceDt)}</span>
+              </div>
+              <div className="info-item">
+                <span className="label">입찰개시일시</span>
+                <span className="value">{formatDate(bid.bidBeginDt)}</span>
+              </div>
+              <div className="info-item">
+                <span className="label">입찰마감일시</span>
+                <span className="value">{formatDate(bid.bidClseDt)}</span>
+              </div>
+              <div className="info-item">
+                <span className="label">개찰일시</span>
+                <span className="value">{formatDate(bid.opengDt)}</span>
+              </div>
+              <div className="info-item">
+                <span className="label">계약기간</span>
+                <span className="value">{bid.cntrctPrd || '미정'}</span>
+              </div>
             </div>
-            <div className="info-item">
-              <span className="label">입찰방법</span>
-              <span className="value">{bid.bidMethdNm}</span>
+          </div>
+
+          {/* 참가 정보 */}
+          <div className="info-section">
+            <h3>💰 참가 정보</h3>
+            <div className="info-grid">
+              <div className="info-item">
+                <span className="label">입찰참가수수료</span>
+                <span className="value">{bid.bidPrtcptFee ? `${parseInt(bid.bidPrtcptFee).toLocaleString()}원` : '없음'}</span>
+              </div>
+              <div className="info-item">
+                <span className="label">수수료납부여부</span>
+                <span className="value">{bid.bidPrtcptFeePaymntYn === 'Y' ? '필요' : bid.bidPrtcptFeePaymntYn === 'N' ? '불필요' : '미정'}</span>
+              </div>
+              <div className="info-item">
+                <span className="label">등록유형</span>
+                <span className="value">{bid.rgstTyNm || '일반'}</span>
+              </div>
             </div>
-            <div className="info-item">
-              <span className="label">계약방법</span>
-              <span className="value">{bid.cntrctMthNm}</span>
-            </div>
-            <div className="info-item">
-              <span className="label">추정가격</span>
-              <span className="value">{formatAmount(bid.estmtPrce)}</span>
-            </div>
-            <div className="info-item">
-              <span className="label">입찰공고일시</span>
-              <span className="value">{formatDate(bid.bidNtceDt)}</span>
-            </div>
-            <div className="info-item">
-              <span className="label">입찰마감일시</span>
-              <span className="value">{formatDate(bid.bidClseDt)}</span>
+          </div>
+
+          {/* 기타 정보 */}
+          <div className="info-section">
+            <h3>ℹ️ 기타 정보</h3>
+            <div className="info-grid">
+              <div className="info-item">
+                <span className="label">국제입찰대상</span>
+                <span className="value">{bid.intrbidYn === 'Y' ? '예' : bid.intrbidYn === 'N' ? '아니오' : '미정'}</span>
+              </div>
+              <div className="info-item">
+                <span className="label">재공고여부</span>
+                <span className="value">{bid.reNtceYn === 'Y' ? '예' : bid.reNtceYn === 'N' ? '아니오' : '미정'}</span>
+              </div>
+              <div className="info-item">
+                <span className="label">담당자</span>
+                <span className="value">{bid.cntrctMngrNm || '미정'}</span>
+              </div>
+              <div className="info-item">
+                <span className="label">담당자연락처</span>
+                <span className="value">{bid.cntrctMngrTelno || '미정'}</span>
+              </div>
+              {bid.atchFileNm && (
+                <div className="info-item">
+                  <span className="label">첨부파일</span>
+                  <span className="value">
+                    {bid.atchFileUrl ? (
+                      <a href={bid.atchFileUrl} target="_blank" rel="noopener noreferrer" className="file-link">
+                        {bid.atchFileNm} 📎
+                      </a>
+                    ) : (
+                      bid.atchFileNm
+                    )}
+                  </span>
+                </div>
+              )}
             </div>
           </div>
         </div>

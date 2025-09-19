@@ -295,7 +295,22 @@ class BidService {
         bidBeginDt: new Date(startDate.getTime() + 1 * 24 * 60 * 60 * 1000).toISOString().slice(0, 19).replace('T', ' '),
         opengDt: new Date(startDate.getTime() + 8 * 24 * 60 * 60 * 1000).toISOString().slice(0, 19).replace('T', ' '),
         cntrctCnclsMthdNm: '일반경쟁계약',
-        ntceInsttNm: '조달청'
+        ntceInsttNm: '조달청',
+        
+        // 2단계: 고급 정보
+        bidPrtcptFee: '50000',
+        bidPrtcptFeePaymntYn: 'Y',
+        intrbidYn: 'N',
+        reNtceYn: 'N',
+        rgstTyNm: '일반',
+        
+        // 3단계: 추가 정보
+        bidNtceOrd: '1',
+        cntrctPrd: '계약체결일로부터 12개월',
+        cntrctMngrNm: '김담당',
+        cntrctMngrTelno: '02-1234-5678',
+        atchFileNm: '입찰공고서.pdf',
+        atchFileUrl: 'https://example.com/bid-docs/202412180001.pdf'
       },
       {
         bidNtceNo: '202412180002',
@@ -312,7 +327,22 @@ class BidService {
         bidBeginDt: '2024-12-19 09:00:00',
         opengDt: '2024-12-27 14:00:00',
         cntrctCnclsMthdNm: '일반경쟁계약',
-        ntceInsttNm: '서울시청'
+        ntceInsttNm: '서울시청',
+        
+        // 2단계: 고급 정보
+        bidPrtcptFee: '30000',
+        bidPrtcptFeePaymntYn: 'Y',
+        intrbidYn: 'N',
+        reNtceYn: 'N',
+        rgstTyNm: '일반',
+        
+        // 3단계: 추가 정보
+        bidNtceOrd: '1',
+        cntrctPrd: '계약체결일로부터 6개월',
+        cntrctMngrNm: '이담당',
+        cntrctMngrTelno: '02-2345-6789',
+        atchFileNm: '용역계약서.pdf',
+        atchFileUrl: 'https://example.com/bid-docs/202412180002.pdf'
       },
       {
         bidNtceNo: '202412180003',
@@ -329,7 +359,22 @@ class BidService {
         bidBeginDt: '2024-12-19 10:00:00',
         opengDt: '2024-12-28 15:00:00',
         cntrctCnclsMthdNm: '일반경쟁계약',
-        ntceInsttNm: '한국전력공사'
+        ntceInsttNm: '한국전력공사',
+        
+        // 2단계: 고급 정보
+        bidPrtcptFee: '100000',
+        bidPrtcptFeePaymntYn: 'Y',
+        intrbidYn: 'N',
+        reNtceYn: 'N',
+        rgstTyNm: '제한경쟁',
+        
+        // 3단계: 추가 정보
+        bidNtceOrd: '2',
+        cntrctPrd: '계약체결일로부터 24개월',
+        cntrctMngrNm: '박담당',
+        cntrctMngrTelno: '02-3456-7890',
+        atchFileNm: '공사계약서.pdf',
+        atchFileUrl: 'https://example.com/bid-docs/202412180003.pdf'
       },
       {
         bidNtceNo: '202412180004',
@@ -346,7 +391,22 @@ class BidService {
         bidBeginDt: '2024-12-19 11:00:00',
         opengDt: '2024-12-29 14:00:00',
         cntrctCnclsMthdNm: '일반경쟁계약',
-        ntceInsttNm: '과학기술정보통신부'
+        ntceInsttNm: '과학기술정보통신부',
+        
+        // 2단계: 고급 정보
+        bidPrtcptFee: '75000',
+        bidPrtcptFeePaymntYn: 'Y',
+        intrbidYn: 'Y',
+        reNtceYn: 'N',
+        rgstTyNm: '일반',
+        
+        // 3단계: 추가 정보
+        bidNtceOrd: '1',
+        cntrctPrd: '계약체결일로부터 36개월',
+        cntrctMngrNm: '최담당',
+        cntrctMngrTelno: '02-4567-8901',
+        atchFileNm: '외자계약서.pdf',
+        atchFileUrl: 'https://example.com/bid-docs/202412180004.pdf'
       },
       {
         bidNtceNo: '202412180005',
@@ -363,7 +423,22 @@ class BidService {
         bidBeginDt: '2024-12-19 12:00:00',
         opengDt: '2024-12-30 13:00:00',
         cntrctCnclsMthdNm: '일반경쟁계약',
-        ntceInsttNm: '보건복지부'
+        ntceInsttNm: '보건복지부',
+        
+        // 2단계: 고급 정보
+        bidPrtcptFee: '25000',
+        bidPrtcptFeePaymntYn: 'N',
+        intrbidYn: 'N',
+        reNtceYn: 'Y',
+        rgstTyNm: '일반',
+        
+        // 3단계: 추가 정보
+        bidNtceOrd: '2',
+        cntrctPrd: '계약체결일로부터 18개월',
+        cntrctMngrNm: '정담당',
+        cntrctMngrTelno: '02-5678-9012',
+        atchFileNm: '모바일앱계약서.pdf',
+        atchFileUrl: 'https://example.com/bid-docs/202412180005.pdf'
       }
     ];
 

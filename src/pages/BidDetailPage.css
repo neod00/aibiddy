@@ -361,3 +361,116 @@
     font-size: 18px;
   }
 }
+
+/* 정보 섹션 스타일 */
+.info-section {
+  margin-bottom: 32px;
+  padding: 20px;
+  background: #f8fafc;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.info-section:last-child {
+  margin-bottom: 0;
+}
+
+.info-section h3 {
+  margin: 0 0 16px 0;
+  color: #2d3748;
+  font-size: 18px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+/* 기존 info-grid 스타일 오버라이드 */
+.bid-info-card .info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.bid-info-card .info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.2s ease;
+  flex-direction: row;
+  gap: 8px;
+}
+
+.bid-info-card .info-item:hover {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border-color: #d1d5db;
+}
+
+.bid-info-card .info-item .label {
+  font-weight: 600;
+  color: #374151;
+  font-size: 14px;
+  min-width: 120px;
+}
+
+.bid-info-card .info-item .value {
+  color: #111827;
+  font-size: 14px;
+  text-align: right;
+  max-width: 200px;
+  word-break: break-word;
+}
+
+/* 파일 링크 스타일 */
+.file-link {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.file-link:hover {
+  color: #1d4ed8;
+  text-decoration: underline;
+}
+
+/* 모바일 반응형 - 정보 섹션 */
+@media (max-width: 768px) {
+  .bid-info-card .info-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  
+  .bid-info-card .info-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  
+  .bid-info-card .info-item .label {
+    min-width: auto;
+    font-size: 13px;
+  }
+  
+  .bid-info-card .info-item .value {
+    text-align: left;
+    max-width: 100%;
+    font-size: 13px;
+  }
+  
+  .info-section {
+    padding: 16px;
+    margin-bottom: 24px;
+  }
+  
+  .info-section h3 {
+    font-size: 16px;
+  }
+}

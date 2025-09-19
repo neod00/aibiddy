@@ -32,12 +32,20 @@ export interface BidItem {
   cntrctCnclsMthdNm?: string; // 계약체결방법명
   ntceInsttNm?: string; // 공고기관명
   
-  // 2단계: 고급 정보 (나중에 추가)
+  // 2단계: 고급 정보
   bidPrtcptFee?: string; // 입찰참가수수료
   bidPrtcptFeePaymntYn?: string; // 입찰참가수수료납부여부
   intrbidYn?: string; // 국제입찰대상여부
   reNtceYn?: string; // 재공고여부
   rgstTyNm?: string; // 등록유형명
+  
+  // 3단계: 추가 정보
+  bidNtceOrd?: string; // 입찰공고차수
+  cntrctPrd?: string; // 계약기간
+  cntrctMngrNm?: string; // 담당자명
+  cntrctMngrTelno?: string; // 담당자연락처
+  atchFileNm?: string; // 첨부파일명
+  atchFileUrl?: string; // 첨부파일URL
 }
 
 export interface BidResponse {

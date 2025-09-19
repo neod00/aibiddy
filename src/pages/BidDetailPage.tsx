@@ -161,7 +161,7 @@ const BidDetailPage: React.FC = () => {
       <div className="detail-header">
         <button 
           className="back-button"
-          onClick={() => navigate(-1)}
+          onClick={() => navigate('/')}
         >
           ← 뒤로가기
         </button>

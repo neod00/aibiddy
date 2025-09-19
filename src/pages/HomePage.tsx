@@ -20,6 +20,31 @@ const HomePage: React.FC = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [searchParams, setSearchParams] = useState<SearchFormData>(() => {
     const today = new Date().toISOString().split('T')[0];
+    
+    // URL 파라미터에서 검색 상태 복원
+    const urlParams = new URLSearchParams(window.location.search);
+    const savedSearchParams = localStorage.getItem('ai_nakchali_search_params');
+    
+    if (savedSearchParams) {
+      try {
+        const parsed = JSON.parse(savedSearchParams);
+        return {
+          keyword: parsed.keyword || '',
+          type: parsed.type || '',
+          minAmount: parsed.minAmount || '',
+          maxAmount: parsed.maxAmount || '',
+          agency: parsed.agency || '',
+          region: parsed.region || '',
+          startDate: parsed.startDate || today,
+          endDate: parsed.endDate || today,
+          dateRange: parsed.dateRange || 'today',
+          dateCriteria: parsed.dateCriteria || 'opening',
+        };
+      } catch (error) {
+        console.error('검색 파라미터 복원 오류:', error);
+      }
+    }
+    
     return {
       keyword: '',
       type: '',
@@ -49,6 +74,10 @@ const HomePage: React.FC = () => {
   const handleSearch = (formData: SearchFormData) => {
     setSearchParams(formData);
     setCurrentPage(1);
+    
+    // 검색 상태를 localStorage에 저장
+    localStorage.setItem('ai_nakchali_search_params', JSON.stringify(formData));
+    
     fetchBids(formData, 1);
   };
 
@@ -98,6 +127,15 @@ const HomePage: React.FC = () => {
       
       setBids(bids);
       setTotalPages(Math.ceil(totalCount / 10));
+      
+      // 검색 결과를 localStorage에 저장
+      localStorage.setItem('ai_nakchali_search_results', JSON.stringify({
+        bids,
+        totalCount,
+        currentPage: page,
+        totalPages: Math.ceil(totalCount / 10),
+        searchParams: params
+      }));
     } catch (err) {
       setError(err instanceof Error ? err.message : '입찰공고를 불러오는 데 실패했습니다.');
     } finally {
@@ -115,8 +153,27 @@ const HomePage: React.FC = () => {
     navigate(`/bid/${bid.bidNtceNo}`);
   };
 
-  // 초기 로드 시 기본 검색
+  // 초기 로드 시 저장된 검색 결과 복원 또는 기본 검색
   useEffect(() => {
+    const savedResults = localStorage.getItem('ai_nakchali_search_results');
+    
+    if (savedResults) {
+      try {
+        const parsed = JSON.parse(savedResults);
+        setBids(parsed.bids || []);
+        setTotalPages(parsed.totalPages || 1);
+        setCurrentPage(parsed.currentPage || 1);
+        
+        // 저장된 검색 파라미터와 현재 파라미터가 같으면 API 호출 생략
+        if (JSON.stringify(parsed.searchParams) === JSON.stringify(searchParams)) {
+          return;
+        }
+      } catch (error) {
+        console.error('검색 결과 복원 오류:', error);
+      }
+    }
+    
+    // 저장된 결과가 없거나 파라미터가 다르면 API 호출
     fetchBids(searchParams, 1);
   }, [searchParams]);
 

@@ -116,6 +116,195 @@ ${content}
     `.trim();
   }
 
+  // 실제 입찰공고 내용을 기반으로 한 스마트 목업 요약 생성
+  private generateSmartMockSummary(request: SummaryRequest): any {
+    const { bidTitle, bidContent } = request;
+    
+    // 입찰공고명에서 키워드 추출
+    const titleKeywords = this.extractKeywords(bidTitle);
+    
+    // 입찰공고 내용에서 정보 추출
+    const extractedInfo = this.extractBidInfo(bidContent);
+    
+    // 핵심 요구사항 생성
+    const coreRequirements = this.generateCoreRequirements(titleKeywords, extractedInfo);
+    
+    // 제출서류 생성
+    const requiredDocuments = this.generateRequiredDocuments(titleKeywords, extractedInfo);
+    
+    // 마감일 정보
+    const deadline = extractedInfo.deadline || '정보 없음';
+    
+    // 예산 정보
+    const budget = extractedInfo.budget || '정보 없음';
+    
+    return {
+      coreRequirements,
+      requiredDocuments,
+      deadline,
+      budget,
+    };
+  }
+
+  // 키워드 추출
+  private extractKeywords(title: string): string[] {
+    const keywords = [];
+    
+    // 기술 관련 키워드
+    if (title.includes('소프트웨어') || title.includes('시스템') || title.includes('개발')) {
+      keywords.push('소프트웨어 개발');
+    }
+    if (title.includes('AI') || title.includes('인공지능') || title.includes('머신러닝')) {
+      keywords.push('AI/인공지능');
+    }
+    if (title.includes('웹') || title.includes('홈페이지') || title.includes('사이트')) {
+      keywords.push('웹 개발');
+    }
+    if (title.includes('모바일') || title.includes('앱') || title.includes('어플리케이션')) {
+      keywords.push('모바일 개발');
+    }
+    if (title.includes('데이터') || title.includes('분석') || title.includes('DB')) {
+      keywords.push('데이터 분석');
+    }
+    if (title.includes('보안') || title.includes('암호화') || title.includes('인증')) {
+      keywords.push('보안');
+    }
+    if (title.includes('클라우드') || title.includes('AWS') || title.includes('Azure')) {
+      keywords.push('클라우드');
+    }
+    
+    // 용역 관련 키워드
+    if (title.includes('컨설팅') || title.includes('자문')) {
+      keywords.push('컨설팅');
+    }
+    if (title.includes('교육') || title.includes('훈련') || title.includes('강의')) {
+      keywords.push('교육/훈련');
+    }
+    if (title.includes('유지보수') || title.includes('관리') || title.includes('운영')) {
+      keywords.push('유지보수/운영');
+    }
+    
+    return keywords.length > 0 ? keywords : ['일반 용역'];
+  }
+
+  // 입찰공고 내용에서 정보 추출
+  private extractBidInfo(content: string): any {
+    const info: any = {};
+    
+    // 마감일 추출
+    const deadlineMatch = content.match(/입찰마감일시[:\s]*([^\n]+)/);
+    if (deadlineMatch) {
+      info.deadline = deadlineMatch[1].trim();
+    }
+    
+    // 예산 추출
+    const budgetMatch = content.match(/추정가격[:\s]*([^\n]+)/);
+    if (budgetMatch) {
+      const amount = budgetMatch[1].trim();
+      if (amount && amount !== '미정') {
+        info.budget = `${parseInt(amount).toLocaleString()}만원`;
+      }
+    }
+    
+    // 기관명 추출
+    const agencyMatch = content.match(/수요기관[:\s]*([^\n]+)/);
+    if (agencyMatch) {
+      info.agency = agencyMatch[1].trim();
+    }
+    
+    // 지역 추출
+    const regionMatch = content.match(/지역[:\s]*([^\n]+)/);
+    if (regionMatch) {
+      info.region = regionMatch[1].trim();
+    }
+    
+    return info;
+  }
+
+  // 핵심 요구사항 생성
+  private generateCoreRequirements(keywords: string[], info: any): string {
+    let requirements = '';
+    
+    // 기술적 요구사항
+    if (keywords.includes('소프트웨어 개발')) {
+      requirements += '• 관련 프로그래밍 언어 및 프레임워크 경험\n';
+      requirements += '• 소프트웨어 개발 프로젝트 수행 경험\n';
+    }
+    if (keywords.includes('AI/인공지능')) {
+      requirements += '• AI/머신러닝 기술 보유 및 적용 경험\n';
+      requirements += '• 데이터 분석 및 모델링 역량\n';
+    }
+    if (keywords.includes('웹 개발')) {
+      requirements += '• 웹 개발 기술 스택 보유 (HTML, CSS, JavaScript, React 등)\n';
+      requirements += '• 반응형 웹 디자인 구현 경험\n';
+    }
+    if (keywords.includes('모바일 개발')) {
+      requirements += '• 모바일 앱 개발 경험 (iOS/Android)\n';
+      requirements += '• 크로스 플랫폼 개발 도구 활용 능력\n';
+    }
+    if (keywords.includes('데이터 분석')) {
+      requirements += '• 데이터베이스 설계 및 관리 경험\n';
+      requirements += '• 데이터 시각화 및 분석 도구 활용\n';
+    }
+    if (keywords.includes('보안')) {
+      requirements += '• 정보보안 관련 자격증 보유\n';
+      requirements += '• 보안 시스템 구축 및 운영 경험\n';
+    }
+    if (keywords.includes('클라우드')) {
+      requirements += '• 클라우드 플랫폼 활용 경험 (AWS, Azure, GCP 등)\n';
+      requirements += '• 클라우드 아키텍처 설계 능력\n';
+    }
+    
+    // 일반 요구사항
+    requirements += '• 관련 업종 3년 이상 사업 경험\n';
+    requirements += '• 안정적 재무상태 및 신용도\n';
+    requirements += '• 기술인력 보유 및 프로젝트 관리 역량\n';
+    
+    // 기관별 특수 요구사항
+    if (info.agency && info.agency.includes('청')) {
+      requirements += '• 공공기관 프로젝트 수행 경험\n';
+      requirements += '• 정보시스템 감리 및 보안 점검 대응 능력\n';
+    }
+    
+    return requirements || '• 관련 업종 경험 및 기술 역량\n• 안정적 재무상태\n• 프로젝트 수행 능력';
+  }
+
+  // 제출서류 생성
+  private generateRequiredDocuments(keywords: string[], info: any): string {
+    let documents = '';
+    
+    // 기본 제출서류
+    documents += '• 사업자등록증 사본\n';
+    documents += '• 법인등기부등본 (법인의 경우)\n';
+    documents += '• 입찰참가신청서\n';
+    documents += '• 기술제안서\n';
+    documents += '• 가격제안서\n';
+    
+    // 기술 관련 서류
+    if (keywords.some(k => ['소프트웨어 개발', 'AI/인공지능', '웹 개발', '모바일 개발'].includes(k))) {
+      documents += '• 기술보유현황서\n';
+      documents += '• 개발환경 및 도구 명세서\n';
+      documents += '• 프로젝트 수행계획서\n';
+    }
+    
+    // 보안 관련 서류
+    if (keywords.includes('보안')) {
+      documents += '• 정보보안 관리체계 인증서\n';
+      documents += '• 개인정보보호 관리체계 인증서\n';
+    }
+    
+    // 실적 관련 서류
+    documents += '• 최근 3년간 관련 사업 실적증명서\n';
+    documents += '• 기술인력 현황서\n';
+    documents += '• 재무제표 (최근 2년)\n';
+    
+    // 기타 서류
+    documents += '• 입찰보증금 납부서\n';
+    documents += '• 기타 요구사항에 따른 증빙서류\n';
+    
+    return documents;
+  }
+
   // 요약 텍스트 파싱
   private parseSummaryText(text: string) {
     const lines = text.split('\n').filter(line => line.trim());

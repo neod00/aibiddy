@@ -120,12 +120,26 @@ const BidSummaryModal: React.FC<BidSummaryModalProps> = ({ isOpen, onClose, bid 
               <h3>🤖 AI 요약</h3>
               {usageInfo && (
                 <div className="usage-info">
-                  <span className="usage-text">
-                    사용량: {usageInfo.totalUsage}회
+                  <div className="usage-stats">
+                    <div className="usage-item">
+                      <span className="usage-label">사용량:</span>
+                      <span className="usage-value">{usageInfo.totalUsage}회</span>
+                    </div>
                     {usageInfo.accountType === 'free' && (
-                      <span className="remaining"> (남은 횟수: {usageInfo.remainingUsage}회)</span>
+                      <div className="usage-item">
+                        <span className="usage-label">잔여량:</span>
+                        <span className={`usage-value ${usageInfo.remainingUsage <= 2 ? 'warning' : ''}`}>
+                          {usageInfo.remainingUsage}회
+                        </span>
+                      </div>
                     )}
-                  </span>
+                    {usageInfo.accountType === 'premium' && (
+                      <div className="usage-item">
+                        <span className="usage-label">계정:</span>
+                        <span className="usage-value premium">프리미엄</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
@@ -133,13 +147,20 @@ const BidSummaryModal: React.FC<BidSummaryModalProps> = ({ isOpen, onClose, bid 
             {!summary && !summaryLoading && !summaryError && (
               <div className="summary-prompt">
                 <p>AI가 입찰공고를 분석하여 핵심 정보를 요약해드립니다.</p>
-                <button
-                  className="btn btn-primary"
-                  onClick={handleGetSummary}
-                  disabled={usageInfo?.remainingUsage === 0}
-                >
-                  {usageInfo?.remainingUsage === 0 ? '사용 한도 초과' : 'AI 요약 생성'}
-                </button>
+                <div className="summary-actions">
+                  <button
+                    className="btn btn-primary"
+                    onClick={handleGetSummary}
+                    disabled={usageInfo?.remainingUsage === 0}
+                  >
+                    {usageInfo?.remainingUsage === 0 ? '사용 한도 초과' : `AI 요약 생성 (${usageInfo?.remainingUsage || 0}회 남음)`}
+                  </button>
+                  {usageInfo?.remainingUsage === 0 && usageInfo?.accountType === 'free' && (
+                    <p className="upgrade-prompt">
+                      더 많은 요약을 원하시면 <strong>프리미엄 계정</strong>으로 업그레이드하세요!
+                    </p>
+                  )}
+                </div>
               </div>
             )}
 

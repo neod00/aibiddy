@@ -70,9 +70,9 @@ class BidService {
 
     try {
       // 조달청 API에 맞는 파라미터 설정
-      // 조회 기간을 최근 1개월로 제한하여 "입력범위값 초과 에러" 방지
+      // 조회 기간을 최근 6개월로 설정하여 충분한 데이터 확보
       const today = new Date();
-      const oneMonthAgo = new Date(today.getTime() - (30 * 24 * 60 * 60 * 1000));
+      const sixMonthsAgo = new Date(today.getTime() - (180 * 24 * 60 * 60 * 1000));
       
       const formatDate = (date: Date) => {
         const year = date.getFullYear();
@@ -87,7 +87,7 @@ class BidService {
         numOfRows: String(params.numOfRows || 10),
         type: 'json',
         inqryDiv: '1', // 1: 공고게시일시, 2: 개찰일시
-        inqryBgnDt: formatDate(oneMonthAgo), // 1개월 전
+        inqryBgnDt: formatDate(sixMonthsAgo), // 6개월 전
         inqryEndDt: formatDate(today), // 오늘
         ...(params.keyword && { bidNtceNm: params.keyword }),
         ...(params.agency && { dminsttNm: params.agency }),

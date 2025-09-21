@@ -317,8 +317,33 @@ class BidService {
       }
       
       // ResponseError 객체 처리 (nkoneps.com.response.ResponseError)
-      if (apiResponse.constructor && apiResponse.constructor.name === 'ResponseError') {
-        console.error('ResponseError 객체 감지:', apiResponse);
+      if (apiResponse['nkoneps.com.response.ResponseError']) {
+        const responseError = apiResponse['nkoneps.com.response.ResponseError'];
+        console.error('ResponseError 객체 감지:', responseError);
+        
+        if (responseError.header) {
+          const resultCode = responseError.header.resultCode;
+          const resultMsg = responseError.header.resultMsg;
+          
+          // 날짜 범위 초과 오류 (사용자 친화적 메시지)
+          if (resultCode === '07' || resultMsg?.includes('입력범위값 초과 에러')) {
+            throw new Error('DATE_RANGE_EXCEEDED');
+          }
+          
+          // API 키 관련 오류
+          if (resultCode === '30' || resultMsg?.includes('SERVICE_KEY_IS_NOT_REGISTERED_ERROR')) {
+            throw new Error('SERVICE_KEY_IS_NOT_REGISTERED_ERROR');
+          }
+          
+          // 기타 서비스 오류
+          if (resultCode === '99' || resultMsg?.includes('SERVICE ERROR')) {
+            throw new Error('SERVICE ERROR');
+          }
+          
+          // 일반적인 오류
+          throw new Error(`API 오류 (${resultCode}): ${resultMsg || '알 수 없는 오류'}`);
+        }
+        
         throw new Error('API 서비스 오류가 발생했습니다.');
       }
       

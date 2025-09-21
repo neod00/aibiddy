@@ -334,7 +334,7 @@
   border-color: var(--accent-primary);
 }
 
-/* 지난공고 포함 옵션 스타일 */
+/* 지난공고 제외 옵션 스타일 */
 .past-bids-option {
   margin: 20px 0;
   padding: 16px;

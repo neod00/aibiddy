@@ -22,7 +22,7 @@ const SearchForm: React.FC<SearchFormProps> = memo(({ onSearch, loading }) => {
     endDate: today,   // 종료일은 오늘
     dateRange: 'today', // 기본값: 당일
     dateCriteria: 'opening', // 기본값: 개찰일
-    includePastBids: false, // 기본값: 지난공고 포함 안함
+    includePastBids: true, // 기본값: 지난공고 제외 (체크됨)
   });
 
   const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -89,7 +89,7 @@ const SearchForm: React.FC<SearchFormProps> = memo(({ onSearch, loading }) => {
       endDate: today,
       dateRange: 'today',
       dateCriteria: 'opening',
-      includePastBids: false,
+      includePastBids: true, // 기본값: 지난공고 제외 (체크됨)
     });
   }, []);
 
@@ -297,7 +297,7 @@ const SearchForm: React.FC<SearchFormProps> = memo(({ onSearch, loading }) => {
           </div>
         </div>
 
-        {/* 지난공고 포함 옵션 */}
+        {/* 지난공고 제외 옵션 */}
         <div className="past-bids-option">
           <label className="checkbox-label">
             <input
@@ -308,7 +308,7 @@ const SearchForm: React.FC<SearchFormProps> = memo(({ onSearch, loading }) => {
               className="checkbox-input"
             />
             <span className="checkbox-text">
-              지난공고 포함 (마감일/개찰일이 지난 공고도 검색)
+              지난공고(마감일/개찰일) 제외
             </span>
           </label>
         </div>

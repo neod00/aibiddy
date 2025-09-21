@@ -39,7 +39,7 @@ const HomePage: React.FC = () => {
           endDate: parsed.endDate || today,
           dateRange: parsed.dateRange || 'today',
           dateCriteria: parsed.dateCriteria || 'opening',
-          includePastBids: parsed.includePastBids || false,
+          includePastBids: parsed.includePastBids !== undefined ? parsed.includePastBids : true,
         };
       } catch (error) {
         console.error('검색 파라미터 복원 오류:', error);
@@ -57,7 +57,7 @@ const HomePage: React.FC = () => {
       endDate: today,
       dateRange: 'today',
       dateCriteria: 'opening',
-      includePastBids: false,
+      includePastBids: true, // 기본값: 지난공고 제외 (체크됨)
     };
   });
 

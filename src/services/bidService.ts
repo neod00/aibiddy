@@ -81,8 +81,8 @@ class BidService {
         ? new Date(params.endDate + 'T23:59:59')
         : today;
 
-      // 지난공고 포함 옵션이 false인 경우, 오늘 이후만 검색
-      if (!params.includePastBids) {
+      // 지난공고 제외 옵션이 true인 경우, 오늘 이후만 검색
+      if (params.includePastBids) {
         startDate = today;
         console.log('지난공고 제외: 오늘 이후 공고만 검색합니다.');
       } else {

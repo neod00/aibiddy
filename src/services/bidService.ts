@@ -301,6 +301,11 @@ class BidService {
             throw new Error('SERVICE_KEY_IS_NOT_REGISTERED_ERROR');
           }
           
+          // 날짜 범위 초과 오류 (사용자 친화적 메시지)
+          if (resultCode === '07' || resultMsg?.includes('입력범위값 초과 에러')) {
+            throw new Error('DATE_RANGE_EXCEEDED');
+          }
+          
           // 기타 서비스 오류
           if (resultCode === '99' || resultMsg?.includes('SERVICE ERROR')) {
             throw new Error('SERVICE ERROR');

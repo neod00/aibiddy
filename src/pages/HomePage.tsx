@@ -147,6 +147,8 @@ const HomePage: React.FC = () => {
         setError('조달청 API 키가 등록되지 않았습니다. 관리자에게 문의하세요.');
       } else if (err.message && err.message.includes('SERVICE ERROR')) {
         setError('조달청 API 서비스 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+      } else if (err.message && err.message.includes('DATE_RANGE_EXCEEDED')) {
+        setError('선택한 날짜 범위가 너무 넓습니다. 날짜 범위를 줄여서 다시 검색해주세요. (권장: 1개월 이내)');
       } else {
         setError(err instanceof Error ? err.message : '입찰공고를 불러오는 데 실패했습니다.');
       }

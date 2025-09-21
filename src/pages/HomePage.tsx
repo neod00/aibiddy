@@ -39,6 +39,7 @@ const HomePage: React.FC = () => {
           endDate: parsed.endDate || today,
           dateRange: parsed.dateRange || 'today',
           dateCriteria: parsed.dateCriteria || 'opening',
+          includePastBids: parsed.includePastBids || false,
         };
       } catch (error) {
         console.error('검색 파라미터 복원 오류:', error);
@@ -56,6 +57,7 @@ const HomePage: React.FC = () => {
       endDate: today,
       dateRange: 'today',
       dateCriteria: 'opening',
+      includePastBids: false,
     };
   });
 
@@ -96,6 +98,7 @@ const HomePage: React.FC = () => {
         startDate: params.startDate || undefined,
         endDate: params.endDate || undefined,
         dateCriteria: params.dateCriteria || 'opening',
+        includePastBids: params.includePastBids,
         pageNo: page,
         numOfRows: 10,
       };
@@ -136,8 +139,20 @@ const HomePage: React.FC = () => {
         totalPages: Math.ceil(totalCount / 10),
         searchParams: params
       }));
-    } catch (err) {
-      setError(err instanceof Error ? err.message : '입찰공고를 불러오는 데 실패했습니다.');
+    } catch (err: any) {
+      console.error('입찰공고 조회 중 오류 발생:', err);
+      
+      // API 키 관련 오류인 경우 특별한 메시지 표시
+      if (err.message && err.message.includes('SERVICE_KEY_IS_NOT_REGISTERED_ERROR')) {
+        setError('조달청 API 키가 등록되지 않았습니다. 관리자에게 문의하세요.');
+      } else if (err.message && err.message.includes('SERVICE ERROR')) {
+        setError('조달청 API 서비스 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+      } else {
+        setError(err instanceof Error ? err.message : '입찰공고를 불러오는 데 실패했습니다.');
+      }
+      
+      setBids([]);
+      setTotalPages(1);
     } finally {
       setLoading(false);
     }

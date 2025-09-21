@@ -12,6 +12,7 @@ export interface BidSearchParams {
   startDate?: string; // 시작일 (YYYYMMDD 형식)
   endDate?: string;   // 종료일 (YYYYMMDD 형식)
   dateCriteria?: 'input' | 'opening'; // 날짜 기준: 입력일, 개찰일
+  includePastBids?: boolean; // 지난공고 포함 여부
 }
 
 export interface BidItem {
@@ -74,4 +75,5 @@ export interface SearchFormData {
   endDate: string;   // 종료일 (YYYY-MM-DD 형식)
   dateRange: 'today' | '1week' | '1month' | '3months' | '6months' | '1year'; // 빠른 선택 옵션
   dateCriteria: 'input' | 'opening'; // 날짜 기준: 입력일, 개찰일
+  includePastBids: boolean; // 지난공고 포함 여부
 }

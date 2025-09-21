@@ -333,3 +333,72 @@
   background: var(--bg-secondary);
   border-color: var(--accent-primary);
 }
+
+/* 지난공고 포함 옵션 스타일 */
+.past-bids-option {
+  margin: 20px 0;
+  padding: 16px;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  border: 1px solid var(--border-light);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  transition: color 0.3s ease;
+}
+
+.checkbox-input {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: var(--accent-primary);
+}
+
+.checkbox-text {
+  line-height: 1.4;
+  user-select: none;
+}
+
+.checkbox-label:hover .checkbox-text {
+  color: var(--accent-primary);
+}
+
+/* 다크모드 스타일 */
+[data-theme="dark"] .past-bids-option {
+  background: var(--bg-tertiary);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .checkbox-label {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .checkbox-label:hover .checkbox-text {
+  color: var(--accent-primary);
+}
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+  .past-bids-option {
+    margin: 16px 0;
+    padding: 12px;
+  }
+  
+  .checkbox-label {
+    font-size: 13px;
+    gap: 10px;
+  }
+  
+  .checkbox-input {
+    width: 16px;
+    height: 16px;
+  }
+}

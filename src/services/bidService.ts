@@ -81,10 +81,9 @@ class BidService {
         ? new Date(params.endDate + 'T23:59:59')
         : today;
 
-      // 지난공고 제외 옵션이 true인 경우, 오늘 이후만 검색
+      // 지난공고 제외 옵션에 따른 로그 메시지
       if (params.includePastBids) {
-        startDate = today;
-        console.log('지난공고 제외: 오늘 이후 공고만 검색합니다.');
+        console.log('지난공고 제외: 결과에서 지난 마감일/개찰일 공고를 필터링합니다.');
       } else {
         console.log('지난공고 포함: 모든 기간의 공고를 검색합니다.');
       }
@@ -148,7 +147,7 @@ class BidService {
             const response = await axios.get(apiUrl);
             console.log(`API 응답 상태 (${type}):`, response.status);
             
-            const bidResponse = this.parseApiResponse(response.data);
+            const bidResponse = this.parseApiResponse(response.data, params.includePastBids);
             console.log(`추출된 입찰공고 (${type}):`, bidResponse.response.body.items);
             console.log(`총 개수 (${type}):`, bidResponse.response.body.totalCount);
             
@@ -212,7 +211,7 @@ class BidService {
         console.log('API 응답 데이터:', response.data);
 
         // API 응답을 BidResponse 형태로 변환
-        const bidResponse = this.parseApiResponse(response.data);
+        const bidResponse = this.parseApiResponse(response.data, params.includePastBids);
         console.log('API 응답:', bidResponse);
         console.log('추출된 입찰공고:', bidResponse.response.body.items);
         console.log('총 개수:', bidResponse.response.body.totalCount);
@@ -283,7 +282,7 @@ class BidService {
   }
 
   // API 응답을 BidResponse 형태로 변환
-  private parseApiResponse(apiResponse: any): BidResponse {
+  private parseApiResponse(apiResponse: any, includePastBids?: boolean): BidResponse {
     try {
       console.log('API 응답 파싱 시작:', apiResponse);
       
@@ -345,6 +344,43 @@ class BidService {
 
       console.log('파싱된 입찰공고 수:', items.length);
 
+      // 지난공고 제외 옵션이 true인 경우, 오늘 기준으로 지난 마감일/개찰일을 가진 공고 필터링
+      if (includePastBids) {
+        const today = new Date();
+        const todayString = today.toISOString().split('T')[0];
+        
+        items = items.filter(item => {
+          // 개찰일시 기준으로 필터링
+          const opengDt = item.opengDt;
+          if (opengDt) {
+            const opengDate = new Date(opengDt);
+            const opengDateString = opengDate.toISOString().split('T')[0];
+            
+            // 오늘 이후의 개찰일을 가진 공고만 포함
+            if (opengDateString >= todayString) {
+              return true;
+            }
+          }
+          
+          // 투찰마감일 기준으로도 확인
+          const bidClseDt = item.bidClseDt;
+          if (bidClseDt) {
+            const bidClseDate = new Date(bidClseDt);
+            const bidClseDateString = bidClseDate.toISOString().split('T')[0];
+            
+            // 오늘 이후의 투찰마감일을 가진 공고만 포함
+            if (bidClseDateString >= todayString) {
+              return true;
+            }
+          }
+          
+          // 날짜 정보가 없는 경우 포함하지 않음
+          return false;
+        });
+        
+        console.log('지난공고 필터링 후 입찰공고 수:', items.length);
+      }
+
       return {
         response: {
           header: {
@@ -355,7 +391,7 @@ class BidService {
             items: items,
             numOfRows: body.numOfRows || 10,
             pageNo: body.pageNo || 1,
-            totalCount: body.totalCount || 0
+            totalCount: items.length // 필터링된 실제 개수로 업데이트
           }
         }
       };

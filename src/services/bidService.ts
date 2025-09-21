@@ -135,6 +135,9 @@ class BidService {
 
         console.log('전체 선택: 모든 종류의 API를 호출합니다.');
 
+        let hasSuccessfulResponse = false;
+        let lastError: Error | null = null;
+
         for (const type of allTypes) {
           const endpoint = getEndpointByType(type);
           const apiUrl = `${this.baseURL}/${endpoint}?${searchParams.toString()}`;
@@ -152,10 +155,17 @@ class BidService {
             allResponses.push(bidResponse);
             totalCount += bidResponse.response.body.totalCount;
             allItems = allItems.concat(bidResponse.response.body.items);
-          } catch (error) {
+            hasSuccessfulResponse = true;
+          } catch (error: any) {
             console.error(`${type} API 호출 실패:`, error);
+            lastError = error;
             // 개별 API 실패 시에도 계속 진행
           }
+        }
+
+        // 모든 API가 실패한 경우
+        if (!hasSuccessfulResponse && lastError) {
+          throw lastError;
         }
 
         // 모든 결과를 합쳐서 하나의 응답으로 만들기
@@ -275,13 +285,52 @@ class BidService {
   // API 응답을 BidResponse 형태로 변환
   private parseApiResponse(apiResponse: any): BidResponse {
     try {
+      console.log('API 응답 파싱 시작:', apiResponse);
+      
+      // 조달청 API 오류 응답 처리
+      if (apiResponse.response && apiResponse.response.header) {
+        const header = apiResponse.response.header;
+        const resultCode = header.resultCode;
+        const resultMsg = header.resultMsg;
+        
+        // 오류 코드가 있는 경우
+        if (resultCode && resultCode !== '00') {
+          console.error('조달청 API 오류:', { resultCode, resultMsg });
+          
+          // API 키 관련 오류
+          if (resultCode === '30' || resultMsg?.includes('SERVICE_KEY_IS_NOT_REGISTERED_ERROR')) {
+            throw new Error('SERVICE_KEY_IS_NOT_REGISTERED_ERROR');
+          }
+          
+          // 기타 서비스 오류
+          if (resultCode === '99' || resultMsg?.includes('SERVICE ERROR')) {
+            throw new Error('SERVICE ERROR');
+          }
+          
+          // 일반적인 오류
+          throw new Error(`API 오류 (${resultCode}): ${resultMsg || '알 수 없는 오류'}`);
+        }
+      }
+      
+      // ResponseError 객체 처리 (nkoneps.com.response.ResponseError)
+      if (apiResponse.constructor && apiResponse.constructor.name === 'ResponseError') {
+        console.error('ResponseError 객체 감지:', apiResponse);
+        throw new Error('API 서비스 오류가 발생했습니다.');
+      }
+      
+      // 응답 구조 검증
       const response = apiResponse.response;
-      if (!response || !response.body) {
-        console.error('API 응답 구조가 올바르지 않습니다:', apiResponse);
+      if (!response) {
+        console.error('API 응답에 response 필드가 없습니다:', apiResponse);
         throw new Error('API 응답 구조가 올바르지 않습니다.');
       }
 
       const body = response.body;
+      if (!body) {
+        console.error('API 응답에 body 필드가 없습니다:', apiResponse);
+        throw new Error('API 응답 구조가 올바르지 않습니다.');
+      }
+
       let items: any[] = [];
 
       // items가 객체인 경우 배열로 변환
@@ -293,6 +342,8 @@ class BidService {
           items = Object.values(body.items);
         }
       }
+
+      console.log('파싱된 입찰공고 수:', items.length);
 
       return {
         response: {
@@ -310,7 +361,7 @@ class BidService {
       };
     } catch (error) {
       console.error('API 응답 파싱 중 오류 발생:', error);
-      throw new Error('API 응답 파싱 중 오류가 발생했습니다.');
+      throw error; // 원본 오류를 그대로 전파
     }
   }
 }

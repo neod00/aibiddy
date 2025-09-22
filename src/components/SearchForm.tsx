@@ -1,5 +1,6 @@
 import React, { useState, memo, useCallback } from 'react';
 import { SearchFormData } from '../types/bid';
+import bidService from '../services/bidService';
 import './SearchForm.css';
 
 interface SearchFormProps {
@@ -27,6 +28,12 @@ const SearchForm: React.FC<SearchFormProps> = memo(({ onSearch, loading }) => {
 
   const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
+    
+    // 키워드가 변경될 때 캐시 클리어
+    if (name === 'keyword') {
+      bidService.clearKeywordCache();
+    }
+    
     setFormData(prev => ({
       ...prev,
       [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value,

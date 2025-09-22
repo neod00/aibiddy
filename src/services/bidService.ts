@@ -25,7 +25,12 @@ class BidService {
 
   // 캐시 키 생성
   private getCacheKey(params: BidSearchParams): string {
-    return `bid_list_${JSON.stringify(params)}`;
+    // 키워드를 포함한 고유한 캐시 키 생성
+    const keyParams = {
+      ...params,
+      keyword: params.keyword || '', // 키워드가 없으면 빈 문자열로 처리
+    };
+    return `bid_list_${JSON.stringify(keyParams)}`;
   }
 
   // 캐시에서 데이터 조회
@@ -361,6 +366,24 @@ class BidService {
   clearCacheKey(key: string): void {
     cache.delete(key);
     console.log(`캐시 키가 삭제되었습니다: ${key}`);
+  }
+
+  // 키워드 관련 캐시 클리어 (키워드가 변경될 때 호출)
+  clearKeywordCache(): void {
+    const keysToDelete: string[] = [];
+    const cacheKeys = Array.from(cache.keys());
+    
+    for (const key of cacheKeys) {
+      if (key.startsWith('bid_list_')) {
+        keysToDelete.push(key);
+      }
+    }
+    
+    keysToDelete.forEach(key => {
+      cache.delete(key);
+    });
+    
+    console.log(`키워드 관련 캐시가 클리어되었습니다. 삭제된 키: ${keysToDelete.length}개`);
   }
 
   // API 응답을 BidResponse 형태로 변환

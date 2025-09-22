@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import AuthModal from './AuthModal';
 import UserMenu from './UserMenu';
@@ -11,7 +12,12 @@ interface AppLayoutProps {
 
 const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [showAuthModal, setShowAuthModal] = useState(false);
+
+  const handleUpgrade = () => {
+    navigate('/pricing');
+  };
 
   return (
     <div className="app-layout">
@@ -24,6 +30,14 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
             </div>
             <div className="header-right">
               <ThemeToggle />
+              {user && user.accountType === 'free' && (
+                <button 
+                  className="upgrade-btn"
+                  onClick={handleUpgrade}
+                >
+                  🚀 업그레이드
+                </button>
+              )}
               {user ? (
                 <UserMenu />
               ) : (

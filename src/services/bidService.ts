@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { BidSearchParams, BidResponse } from '../types/bid';
+import { BidSearchParams, BidResponse, BidItem } from '../types/bid';
 
 const NARA_API_URL = process.env.REACT_APP_NARA_API_URL || 'https://apis.data.go.kr/1230000/ad/BidPublicInfoService';
 const NARA_API_KEY = process.env.REACT_APP_NARA_API_KEY || '3d5ffc75a14cccb5038feb87bbf1b03f36591801bd4469fbfaf1d39f90a62ff8';
@@ -493,6 +493,39 @@ class BidService {
         console.log('지난공고 필터링 후 입찰공고 수:', items.length);
       }
 
+      // API 응답을 BidItem으로 변환
+      const transformedItems: BidItem[] = items.map((item: any) => ({
+        bidNtceNo: item.bidNtceNo || '',
+        bidNtceNm: item.bidNtceNm || '',
+        dminsttNm: item.dminsttNm || '',
+        bidNtceDt: item.bidNtceDt || '',
+        bidClseDt: item.bidClseDt || '',
+        bidMethdNm: item.bidMethdNm || '',
+        cntrctMthNm: item.cntrctMthNm || '',
+        estmtPrce: item.presmptPrce || '', // 추정가격 매핑
+        rgnNm: item.rgnNm || '',
+        bidNtceDtlUrl: item.bidNtceDtlUrl || '',
+        bssamt: item.bssamt || null, // 기초금액
+        ntceKindNm: item.ntceKindNm || '',
+        
+        // 추가 필드들
+        bidBeginDt: item.bidBeginDt || '',
+        opengDt: item.opengDt || '',
+        cntrctCnclsMthdNm: item.cntrctCnclsMthdNm || '',
+        ntceInsttNm: item.ntceInsttNm || '',
+        bidPrtcptFee: item.bidPrtcptFee || '',
+        bidPrtcptFeePaymntYn: item.bidPrtcptFeePaymntYn || '',
+        intrbidYn: item.intrbidYn || '',
+        reNtceYn: item.reNtceYn || '',
+        rgstTyNm: item.rgstTyNm || '',
+        bidNtceOrd: item.bidNtceOrd || '',
+        cntrctPrd: item.cntrctPrd || '',
+        cntrctMngrNm: item.cntrctMngrNm || '',
+        cntrctMngrTelno: item.cntrctMngrTelno || '',
+        atchFileNm: item.atchFileNm || '',
+        atchFileUrl: item.atchFileUrl || ''
+      }));
+
       return {
         response: {
           header: {
@@ -500,10 +533,10 @@ class BidService {
             resultMsg: response.header?.resultMsg || 'NORMAL_SERVICE'
           },
           body: {
-            items: items,
+            items: transformedItems,
             numOfRows: body.numOfRows || 10,
             pageNo: body.pageNo || 1,
-            totalCount: items.length // 필터링된 실제 개수로 업데이트
+            totalCount: transformedItems.length // 필터링된 실제 개수로 업데이트
           }
         }
       };

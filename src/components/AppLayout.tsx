@@ -30,7 +30,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
             </div>
             <div className="header-right">
               <ThemeToggle />
-              {user && user.accountType === 'free' && (
+              {user && (
                 <button 
                   className="upgrade-btn"
                   onClick={handleUpgrade}

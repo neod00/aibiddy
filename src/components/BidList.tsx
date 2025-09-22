@@ -240,7 +240,7 @@ const BidList: React.FC<BidListProps> = memo(({ bids, loading, onBidClick }) => 
                   </td>
                   <td className="col-amount">
                     <div className="amount-content">
-                      <div className="base-amount">{bid.bssamt ? formatAmount(bid.bssamt) : ''}</div>
+                      <div className="base-amount">{bid.bssamt ? formatAmount(bid.bssamt) : '미공개'}</div>
                       <div className="estimated-amount">{formatAmount(bid.estmtPrce)}</div>
                     </div>
                   </td>

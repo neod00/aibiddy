@@ -182,6 +182,13 @@
   color: #6c757d;
 }
 
+.base-amount:empty::after {
+  content: "미공개";
+  color: #dc3545;
+  font-style: italic;
+  font-weight: 500;
+}
+
 .estimated-amount {
   font-weight: 600;
   color: #f57c00;
@@ -546,6 +553,13 @@
 
 [data-theme="dark"] .base-amount {
   color: var(--text-secondary);
+}
+
+[data-theme="dark"] .base-amount:empty::after {
+  content: "미공개";
+  color: #ff6b6b;
+  font-style: italic;
+  font-weight: 500;
 }
 
 [data-theme="dark"] .input-date {

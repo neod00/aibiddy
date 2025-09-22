@@ -294,12 +294,27 @@ class BidService {
       };
 
       const endpoint = getBasisAmountEndpoint(bidType);
+      
+      // 현재 날짜 기준으로 조회 기간 설정 (최근 1개월)
+      const now = new Date();
+      const oneMonthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+      
+      const formatDate = (date: Date) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}${month}${day}0000`;
+      };
+
       const searchParams = new URLSearchParams({
         ServiceKey: this.apiKey,
+        inqryDiv: '1', // 조회구분 (1: 기초금액등록일시)
+        inqryBgnDt: formatDate(oneMonthAgo), // 조회시작일시
+        inqryEndDt: formatDate(now), // 조회종료일시
         bidNtceNo: bidNtceNo,
         type: 'json',
         pageNo: '1',
-        numOfRows: '1',
+        numOfRows: '10',
       });
 
       const apiUrl = `${this.baseURL}/${endpoint}?${searchParams.toString()}`;
@@ -313,7 +328,11 @@ class BidService {
       if (response.data.response && response.data.response.body && response.data.response.body.items) {
         const items = response.data.response.body.items;
         if (Array.isArray(items) && items.length > 0) {
-          basisAmount = items[0].bssamt || null;
+          // 해당 입찰공고번호와 일치하는 항목 찾기
+          const matchingItem = items.find((item: any) => item.bidNtceNo === bidNtceNo);
+          if (matchingItem) {
+            basisAmount = matchingItem.bssamt || null;
+          }
         } else if (typeof items === 'object' && items.bssamt) {
           basisAmount = items.bssamt;
         }

@@ -152,7 +152,7 @@ class BidService {
             const response = await axios.get(apiUrl);
             console.log(`API 응답 상태 (${type}):`, response.status);
             
-            const bidResponse = this.parseApiResponse(response.data, params.includePastBids);
+            const bidResponse = this.parseApiResponse(response.data, params.includePastBids, params.keyword);
             console.log(`추출된 입찰공고 (${type}):`, bidResponse.response.body.items);
             console.log(`총 개수 (${type}):`, bidResponse.response.body.totalCount);
             
@@ -216,7 +216,7 @@ class BidService {
         console.log('API 응답 데이터:', response.data);
 
         // API 응답을 BidResponse 형태로 변환
-        const bidResponse = this.parseApiResponse(response.data, params.includePastBids);
+        const bidResponse = this.parseApiResponse(response.data, params.includePastBids, params.keyword);
         console.log('API 응답:', bidResponse);
         console.log('추출된 입찰공고:', bidResponse.response.body.items);
         console.log('총 개수:', bidResponse.response.body.totalCount);
@@ -387,7 +387,7 @@ class BidService {
   }
 
   // API 응답을 BidResponse 형태로 변환
-  private parseApiResponse(apiResponse: any, includePastBids?: boolean): BidResponse {
+  private parseApiResponse(apiResponse: any, includePastBids?: boolean, keyword?: string): BidResponse {
     try {
       console.log('API 응답 파싱 시작:', apiResponse);
       
@@ -516,8 +516,21 @@ class BidService {
         console.log('지난공고 필터링 후 입찰공고 수:', items.length);
       }
 
+      // 키워드 필터링 (정확한 단어 일치)
+      let filteredItems = items;
+      if (keyword) {
+        const keywordLower = keyword.toLowerCase();
+        filteredItems = items.filter((item: any) => {
+          const title = (item.bidNtceNm || '').toLowerCase();
+          // 정확한 단어 경계에서 키워드가 일치하는지 확인
+          const wordBoundaryRegex = new RegExp(`\\b${keywordLower}\\b`, 'i');
+          return wordBoundaryRegex.test(title);
+        });
+        console.log(`키워드 필터링 전: ${items.length}건, 필터링 후: ${filteredItems.length}건`);
+      }
+
       // API 응답을 BidItem으로 변환
-      const transformedItems: BidItem[] = items.map((item: any) => ({
+      const transformedItems: BidItem[] = filteredItems.map((item: any) => ({
         bidNtceNo: item.bidNtceNo || '',
         bidNtceNm: item.bidNtceNm || '',
         dminsttNm: item.dminsttNm || '',

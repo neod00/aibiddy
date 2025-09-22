@@ -258,10 +258,12 @@ const HomePage: React.FC = () => {
       )}
 
       <div className="results-section">
-        <BidList 
-          bids={bids} 
-          loading={loading} 
+        <BidList
+          bids={bids}
+          loading={loading}
           onBidClick={handleBidClick}
+          currentPage={currentPage}
+          pageSize={10}
         />
       </div>
 

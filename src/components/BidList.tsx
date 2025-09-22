@@ -10,9 +10,11 @@ interface BidListProps {
   bids: BidItem[];
   loading: boolean;
   onBidClick: (bid: BidItem) => void;
+  currentPage?: number;
+  pageSize?: number;
 }
 
-const BidList: React.FC<BidListProps> = memo(({ bids, loading, onBidClick }) => {
+const BidList: React.FC<BidListProps> = memo(({ bids, loading, onBidClick, currentPage = 1, pageSize = 10 }) => {
   const [sortOption, setSortOption] = useState<SortOption>('default');
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
   const [bidsWithBasisAmount, setBidsWithBasisAmount] = useState<BidItem[]>([]);
@@ -218,7 +220,7 @@ const BidList: React.FC<BidListProps> = memo(({ bids, loading, onBidClick }) => 
                   className="bid-row"
                   onClick={() => onBidClick(bid)}
                 >
-                  <td className="col-number">{index + 1}</td>
+                  <td className="col-number">{(currentPage - 1) * pageSize + index + 1}</td>
                   <td className="col-title">
                     <div className="title-content">
                       <div className="tags">

@@ -516,15 +516,14 @@ class BidService {
         console.log('지난공고 필터링 후 입찰공고 수:', items.length);
       }
 
-      // 키워드 필터링 (정확한 단어 일치)
+      // 키워드 필터링 (부분 일치)
       let filteredItems = items;
       if (keyword) {
         const keywordLower = keyword.toLowerCase();
         filteredItems = items.filter((item: any) => {
           const title = (item.bidNtceNm || '').toLowerCase();
-          // 정확한 단어 경계에서 키워드가 일치하는지 확인
-          const wordBoundaryRegex = new RegExp(`\\b${keywordLower}\\b`, 'i');
-          return wordBoundaryRegex.test(title);
+          // 키워드가 제목에 포함되어 있는지 확인 (부분 일치)
+          return title.includes(keywordLower);
         });
         console.log(`키워드 필터링 전: ${items.length}건, 필터링 후: ${filteredItems.length}건`);
       }

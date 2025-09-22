@@ -1,5 +1,6 @@
-import React, { memo, useCallback, useState, useMemo } from 'react';
+import React, { memo, useCallback, useState, useMemo, useEffect } from 'react';
 import { BidItem } from '../types/bid';
+import bidService from '../services/bidService';
 import './BidList.css';
 
 type SortOption = 'default' | 'title' | 'agency' | 'deadline' | 'amount';
@@ -14,31 +15,83 @@ interface BidListProps {
 const BidList: React.FC<BidListProps> = memo(({ bids, loading, onBidClick }) => {
   const [sortOption, setSortOption] = useState<SortOption>('default');
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
+  const [bidsWithBasisAmount, setBidsWithBasisAmount] = useState<BidItem[]>([]);
 
   const formatAmount = useCallback((amount: string) => {
-    if (!amount) return '미정';
+    if (!amount) return '';
     const num = parseInt(amount);
     if (isNaN(num)) return amount;
-    return `${num.toLocaleString()}만원`;
+    return num.toLocaleString();
   }, []);
 
   const formatDate = useCallback((dateStr: string) => {
-    if (!dateStr) return '미정';
+    if (!dateStr) return '';
     const date = new Date(dateStr);
     return date.toLocaleDateString('ko-KR', {
-      year: 'numeric',
+      year: '2-digit',
       month: '2-digit',
       day: '2-digit',
       hour: '2-digit',
       minute: '2-digit',
-    });
+    }).replace(/\./g, '-').replace(/\s/g, ' ');
+  }, []);
+
+  // 기초금액 로드
+  useEffect(() => {
+    const loadBasisAmounts = async () => {
+      if (bids.length === 0) return;
+      
+      const updatedBids = await Promise.all(
+        bids.map(async (bid) => {
+          try {
+            const basisAmount = await bidService.getBasisAmount(bid.bidNtceNo, '물품');
+            return { ...bid, bssamt: basisAmount };
+          } catch (error) {
+            console.error(`기초금액 로드 실패 (${bid.bidNtceNo}):`, error);
+            return bid;
+          }
+        })
+      );
+      
+      setBidsWithBasisAmount(updatedBids);
+    };
+    
+    loadBasisAmounts();
+  }, [bids]);
+
+  // 태그 생성 함수
+  const getTags = useCallback((bid: BidItem) => {
+    const tags = [];
+    
+    // 전자입찰 태그
+    if (bid.bidMethdNm && bid.bidMethdNm.includes('전자')) {
+      tags.push({ text: '전자', type: 'electronic' });
+    }
+    
+    // 긴급 태그 (공고상태에서)
+    if (bid.ntceKindNm && bid.ntceKindNm.includes('긴급')) {
+      tags.push({ text: '긴급', type: 'urgent' });
+    }
+    
+    // 수의계약 태그
+    if (bid.cntrctMthNm && bid.cntrctMthNm.includes('수의')) {
+      tags.push({ text: '수의', type: 'private' });
+    }
+    
+    // 취소 태그
+    if (bid.ntceKindNm && bid.ntceKindNm.includes('취소')) {
+      tags.push({ text: '취소', type: 'cancelled' });
+    }
+    
+    return tags;
   }, []);
 
   // 정렬된 입찰공고 목록
   const sortedBids = useMemo(() => {
-    if (sortOption === 'default') return bids;
+    const sourceBids = bidsWithBasisAmount.length > 0 ? bidsWithBasisAmount : bids;
+    if (sortOption === 'default') return sourceBids;
 
-    const sorted = [...bids].sort((a, b) => {
+    const sorted = [...sourceBids].sort((a, b) => {
       let comparison = 0;
 
       switch (sortOption) {
@@ -66,7 +119,7 @@ const BidList: React.FC<BidListProps> = memo(({ bids, loading, onBidClick }) => 
     });
 
     return sorted;
-  }, [bids, sortOption, sortOrder]);
+  }, [bids, bidsWithBasisAmount, sortOption, sortOrder]);
 
   const handleSortChange = useCallback((option: SortOption) => {
     if (sortOption === option) {
@@ -143,67 +196,71 @@ const BidList: React.FC<BidListProps> = memo(({ bids, loading, onBidClick }) => 
         </div>
       </div>
       
-      <div className="bid-list">
-        {sortedBids.map((bid) => (
-          <div
-            key={bid.bidNtceNo}
-            className="bid-item"
-            onClick={() => onBidClick(bid)}
-          >
-            <div className="bid-header">
-              <h3 className="bid-title">{bid.bidNtceNm}</h3>
-              <span className="bid-type">{bid.bidMethdNm}</span>
-            </div>
-            
-            <div className="bid-info">
-              <div className="bid-info-item">
-                <span className="info-label">기관:</span>
-                <span className="info-value">{bid.dminsttNm}</span>
-              </div>
-              
-              <div className="bid-info-item">
-                <span className="info-label">지역:</span>
-                <span className="info-value">{bid.rgnNm}</span>
-              </div>
-              
-              <div className="bid-info-item">
-                <span className="info-label">예산:</span>
-                <span className="info-value amount">{formatAmount(bid.estmtPrce)}</span>
-              </div>
-              
-              <div className="bid-info-item">
-                <span className="info-label">마감:</span>
-                <span className="info-value deadline">{formatDate(bid.bidClseDt)}</span>
-              </div>
-              
-              {/* 1단계: 추가된 기본 정보 */}
-              {bid.opengDt && (
-                <div className="bid-info-item">
-                  <span className="info-label">개찰:</span>
-                  <span className="info-value">{formatDate(bid.opengDt)}</span>
-                </div>
-              )}
-              
-              {bid.cntrctCnclsMthdNm && (
-                <div className="bid-info-item">
-                  <span className="info-label">계약:</span>
-                  <span className="info-value">{bid.cntrctCnclsMthdNm}</span>
-                </div>
-              )}
-              
-              {bid.ntceInsttNm && (
-                <div className="bid-info-item">
-                  <span className="info-label">공고기관:</span>
-                  <span className="info-value">{bid.ntceInsttNm}</span>
-                </div>
-              )}
-            </div>
-            
-            <div className="bid-actions">
-              <span className="view-detail">상세보기 →</span>
-            </div>
-          </div>
-        ))}
+      {/* 테이블 형태로 변경 */}
+      <div className="bid-table-container">
+        <table className="bid-table">
+          <thead>
+            <tr>
+              <th className="col-number">번호</th>
+              <th className="col-title">공고명 / 공고번호</th>
+              <th className="col-region">지역 / 공고기관</th>
+              <th className="col-amount">기초금액 / 추정가격</th>
+              <th className="col-dates">입력일 / 입찰일시</th>
+              <th className="col-deadline">참가신청마감일 / 투찰마감일시</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sortedBids.map((bid, index) => {
+              const tags = getTags(bid);
+              return (
+                <tr
+                  key={bid.bidNtceNo}
+                  className="bid-row"
+                  onClick={() => onBidClick(bid)}
+                >
+                  <td className="col-number">{index + 1}</td>
+                  <td className="col-title">
+                    <div className="title-content">
+                      <div className="tags">
+                        {tags.map((tag, tagIndex) => (
+                          <span key={tagIndex} className={`tag tag-${tag.type}`}>
+                            {tag.text}
+                          </span>
+                        ))}
+                      </div>
+                      <div className="title-text">{bid.bidNtceNm}</div>
+                      <div className="title-number">{bid.bidNtceNo}</div>
+                    </div>
+                  </td>
+                  <td className="col-region">
+                    <div className="region-content">
+                      <div className="region">{bid.rgnNm}</div>
+                      <div className="agency">{bid.dminsttNm}</div>
+                    </div>
+                  </td>
+                  <td className="col-amount">
+                    <div className="amount-content">
+                      <div className="base-amount">{bid.bssamt ? formatAmount(bid.bssamt) : ''}</div>
+                      <div className="estimated-amount">{formatAmount(bid.estmtPrce)}</div>
+                    </div>
+                  </td>
+                  <td className="col-dates">
+                    <div className="dates-content">
+                      <div className="input-date">{formatDate(bid.bidNtceDt)}</div>
+                      <div className="bid-date">{formatDate(bid.opengDt || '')}</div>
+                    </div>
+                  </td>
+                  <td className="col-deadline">
+                    <div className="deadline-content">
+                      <div className="application-deadline">{formatDate(bid.bidBeginDt || '')}</div>
+                      <div className="bid-deadline">{formatDate(bid.bidClseDt)}</div>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       </div>
     </div>
   );

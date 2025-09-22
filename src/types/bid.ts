@@ -26,6 +26,8 @@ export interface BidItem {
   estmtPrce: string; // 추정가격
   rgnNm: string; // 지역명
   bidNtceDtlUrl: string; // 입찰공고상세URL
+  bssamt?: string | null; // 기초금액
+  ntceKindNm?: string; // 공고상태명 (일반, 변경, 취소, 긴급 등)
   
   // 1단계: 기본 정보 확장
   bidBeginDt?: string; // 입찰개시일시

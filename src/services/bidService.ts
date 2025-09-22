@@ -268,6 +268,69 @@ class BidService {
     }
   }
 
+  // 기초금액 조회 (캐시 포함)
+  async getBasisAmount(bidNtceNo: string, bidType: string = '물품'): Promise<string | null> {
+    const cacheKey = `basis_amount_${bidNtceNo}`;
+    const cachedData = this.getCachedData(cacheKey);
+
+    if (cachedData) {
+      console.log('캐시에서 기초금액 데이터 로드:', cacheKey);
+      return cachedData;
+    }
+
+    try {
+      // 종류별로 다른 기초금액 API 엔드포인트 사용
+      const getBasisAmountEndpoint = (type: string) => {
+        switch (type) {
+          case '물품':
+            return 'getBidPblancListInfoThngBsisAmount';
+          case '용역':
+            return 'getBidPblancListInfoServcBsisAmount';
+          case '공사':
+            return 'getBidPblancListInfoCnstwkBsisAmount';
+          default:
+            return 'getBidPblancListInfoThngBsisAmount'; // 기본값은 물품
+        }
+      };
+
+      const endpoint = getBasisAmountEndpoint(bidType);
+      const searchParams = new URLSearchParams({
+        ServiceKey: this.apiKey,
+        bidNtceNo: bidNtceNo,
+        type: 'json',
+        pageNo: '1',
+        numOfRows: '1',
+      });
+
+      const apiUrl = `${this.baseURL}/${endpoint}?${searchParams.toString()}`;
+      console.log('기초금액 API 호출 URL:', apiUrl);
+
+      const response = await axios.get(apiUrl);
+      console.log('기초금액 API 응답:', response.data);
+
+      // API 응답에서 기초금액 추출
+      let basisAmount = null;
+      if (response.data.response && response.data.response.body && response.data.response.body.items) {
+        const items = response.data.response.body.items;
+        if (Array.isArray(items) && items.length > 0) {
+          basisAmount = items[0].bssamt || null;
+        } else if (typeof items === 'object' && items.bssamt) {
+          basisAmount = items.bssamt;
+        }
+      }
+
+      // 응답 데이터 캐시에 저장
+      this.setCachedData(cacheKey, basisAmount);
+      console.log('API에서 기초금액 데이터 로드 및 캐시 저장:', cacheKey, basisAmount);
+
+      return basisAmount;
+    } catch (error: any) {
+      console.error('기초금액 조회 중 오류 발생:', error);
+      // 기초금액 조회 실패는 전체 기능에 영향을 주지 않도록 null 반환
+      return null;
+    }
+  }
+
 
   // 캐시 클리어
   clearCache(): void {
